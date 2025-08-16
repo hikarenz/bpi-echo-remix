@@ -102,10 +102,7 @@
     font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
   }
 
-  /* Dark mode by default */
-  html {
-    @apply dark;
-  }
+  /* Dark mode by default - handled via HTML class */
 }
 
 @layer components {
