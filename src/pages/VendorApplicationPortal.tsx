@@ -70,10 +70,14 @@ export default function VendorApplicationPortal() {
 
   const fetchVendors = async () => {
     try {
+      console.log('Fetching vendors...');
       const { data, error } = await supabase
         .from('vendor_companies')
         .select('*')
         .order('created_at', { ascending: false });
+
+      console.log('Vendors data:', data);
+      console.log('Vendors error:', error);
 
       if (error) throw error;
       setVendors(data || []);
@@ -291,46 +295,54 @@ export default function VendorApplicationPortal() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {vendors.map((vendor) => (
-                    <TableRow key={vendor.id}>
-                      <TableCell>
-                        <div>
-                          <div className="font-medium">{vendor.company_name}</div>
-                          <div className="text-sm text-muted-foreground">{vendor.company_email}</div>
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <div>
-                          <div className="text-sm">{vendor.contact_person}</div>
-                          <div className="text-sm text-muted-foreground">{vendor.contact_phone}</div>
-                        </div>
-                      </TableCell>
-                      <TableCell>{getStatusBadge(vendor.status)}</TableCell>
-                      <TableCell>{getRiskBadge(vendor.risk_level)}</TableCell>
-                      <TableCell>{vendor.performance_score}%</TableCell>
-                      <TableCell>
-                        <div className="flex gap-2">
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => setSelectedVendor(vendor)}
-                          >
-                            <Eye className="h-4 w-4" />
-                          </Button>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => {
-                              setSelectedVendor(vendor);
-                              setShowInviteDialog(true);
-                            }}
-                          >
-                            <Send className="h-4 w-4" />
-                          </Button>
-                        </div>
+                  {vendors.length === 0 ? (
+                    <TableRow>
+                      <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
+                        No vendor companies found. Click "Add Vendor Company" to create your first vendor.
                       </TableCell>
                     </TableRow>
-                  ))}
+                  ) : (
+                    vendors.map((vendor) => (
+                      <TableRow key={vendor.id}>
+                        <TableCell>
+                          <div>
+                            <div className="font-medium">{vendor.company_name}</div>
+                            <div className="text-sm text-muted-foreground">{vendor.company_email}</div>
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <div>
+                            <div className="text-sm">{vendor.contact_person}</div>
+                            <div className="text-sm text-muted-foreground">{vendor.contact_phone}</div>
+                          </div>
+                        </TableCell>
+                        <TableCell>{getStatusBadge(vendor.status)}</TableCell>
+                        <TableCell>{getRiskBadge(vendor.risk_level)}</TableCell>
+                        <TableCell>{vendor.performance_score}%</TableCell>
+                        <TableCell>
+                          <div className="flex gap-2">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => setSelectedVendor(vendor)}
+                            >
+                              <Eye className="h-4 w-4" />
+                            </Button>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => {
+                                setSelectedVendor(vendor);
+                                setShowInviteDialog(true);
+                              }}
+                            >
+                              <Send className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  )}
                 </TableBody>
               </Table>
             </CardContent>
