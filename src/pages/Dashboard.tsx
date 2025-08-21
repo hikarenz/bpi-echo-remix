@@ -120,10 +120,6 @@ export default function Dashboard() {
         </div>
         
         <div className="flex gap-3">
-          <Button variant="default" className="bg-gradient-primary hover:bg-primary-hover glow-primary">
-            <Users className="h-4 w-4 mr-2" />
-            Add Vendor
-          </Button>
         </div>
       </div>
 
