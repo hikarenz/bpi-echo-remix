@@ -176,28 +176,6 @@ export default function Dashboard() {
         </Card>
       </div>
 
-      {/* Quick Actions */}
-      <Card className="card-gradient">
-        <h3 className="text-lg font-semibold text-card-foreground mb-4">Quick Actions</h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <Button variant="outline" className="h-20 flex flex-col gap-2">
-            <Users className="h-6 w-6" />
-            <span className="text-sm">Add Vendor</span>
-          </Button>
-          <Button variant="outline" className="h-20 flex flex-col gap-2">
-            <FileText className="h-6 w-6" />
-            <span className="text-sm">Start Assessment</span>
-          </Button>
-          <Button variant="outline" className="h-20 flex flex-col gap-2">
-            <Shield className="h-6 w-6" />
-            <span className="text-sm">Upload Contract</span>
-          </Button>
-          <Button variant="outline" className="h-20 flex flex-col gap-2">
-            <Calendar className="h-6 w-6" />
-            <span className="text-sm">Schedule Review</span>
-          </Button>
-        </div>
-      </Card>
     </div>
   );
 }
