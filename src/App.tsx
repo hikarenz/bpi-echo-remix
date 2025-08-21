@@ -12,6 +12,7 @@ import NotFound from "./pages/NotFound";
 import VendorDashboard from "./pages/VendorDashboard";
 import VendorActiveManagement from "./pages/VendorActiveManagement";
 import VendorRenewal from "./pages/VendorRenewal";
+import ManageVendors from "./pages/ManageVendors";
 
 const queryClient = new QueryClient();
 
@@ -30,6 +31,7 @@ const App = () => (
             <Route path="renewal-exit" element={<div className="p-8 text-center text-muted-foreground">Renewal/Exit page coming soon...</div>} />
             <Route path="offboarding" element={<div className="p-8 text-center text-muted-foreground">Offboarding page coming soon...</div>} />
             <Route path="echo-ai" element={<div className="p-8 text-center text-muted-foreground">Echo AI page coming soon...</div>} />
+            <Route path="manage-vendors" element={<ManageVendors />} />
           </Route>
           
           <Route path="/vendors" element={<VendorLayout />}>
