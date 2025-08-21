@@ -19,12 +19,8 @@ interface SidebarProps {
 
 const navigationItems = [
   { name: 'Dashboard', href: '/', icon: LayoutDashboard },
-  { name: 'Evaluation', href: '/evaluation', icon: ClipboardCheck },
-  { name: 'Onboarding', href: '/onboarding', icon: UserPlus },
-  { name: 'Active Management', href: '/active-management', icon: Activity },
-  { name: 'Renewal/Exit', href: '/renewal-exit', icon: RefreshCw },
-  { name: 'Offboarding', href: '/offboarding', icon: UserX },
-  { name: 'Echo AI', href: '/echo-ai', icon: Bot },
+  { name: 'Manage Vendors', href: '/manage-vendors', icon: UserPlus },
+  { name: 'Vendors', href: '/vendors', icon: Activity },
 ];
 
 export function Sidebar({ open, onToggle }: SidebarProps) {
