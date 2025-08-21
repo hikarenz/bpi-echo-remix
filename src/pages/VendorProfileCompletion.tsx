@@ -45,7 +45,7 @@ const steps = [
 ];
 
 export default function VendorProfileCompletion() {
-  const { user } = useAuth();
+  const { user, session } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
@@ -166,12 +166,19 @@ export default function VendorProfileCompletion() {
   };
 
   const onSubmit = async (data: VendorProfileForm) => {
-    console.log('🚀 Starting simplified form submission');
-    
     if (!user) {
       toast({
-        title: 'Error',
-        description: 'You must be logged in to submit.',
+        title: 'Authentication Error',
+        description: 'You must be logged in to submit your profile.',
+        variant: 'destructive'
+      });
+      return;
+    }
+
+    if (!session) {
+      toast({
+        title: 'Session Error',
+        description: 'Your session has expired. Please refresh the page and try again.',
         variant: 'destructive'
       });
       return;
@@ -179,28 +186,51 @@ export default function VendorProfileCompletion() {
 
     setLoading(true);
     try {
-      console.log('📤 Creating vendor company with simplified data...');
+      console.log('Authentication Debug:', {
+        userExists: !!user,
+        userId: user.id,
+        sessionExists: !!session,
+        accessToken: session.access_token ? 'Present' : 'Missing',
+        tokenExpiry: session.expires_at ? new Date(session.expires_at * 1000) : 'Unknown'
+      });
+
+      // Verify current session is still valid
+      const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+      console.log('Current session check:', { sessionData, sessionError });
+
+      if (sessionError || !sessionData.session) {
+        throw new Error('Session validation failed. Please refresh and try again.');
+      }
+
+      console.log('Submitting vendor company data:', data);
       
-      // Create vendor company with minimal required fields
+      // Create vendor company with explicit session context
       const { data: vendorCompany, error: companyError } = await supabase
         .from('vendor_companies')
         .insert({
-          company_name: data.company_name || 'Default Company',
-          company_email: data.company_email || user.email,
-          company_address: data.company_address || 'TBD',
-          contact_person: data.contact_person || 'TBD',
-          contact_phone: data.contact_phone || 'TBD'
+          company_name: data.company_name,
+          company_email: data.company_email,
+          company_address: data.company_address,
+          contact_person: data.contact_person,
+          contact_phone: data.contact_phone,
+          status: 'profile_pending',
+          profile_submitted_at: new Date().toISOString()
         })
         .select()
         .single();
 
+      console.log('Company creation result:', { vendorCompany, companyError });
+
       if (companyError) {
-        console.error('❌ Company creation failed:', companyError);
-        throw new Error(`Failed to create company: ${companyError.message}`);
+        console.error('Company creation error details:', {
+          message: companyError.message,
+          details: companyError.details,
+          hint: companyError.hint,
+          code: companyError.code
+        });
+        throw companyError;
       }
 
-      console.log('🔗 Linking user to vendor company...');
-      
       // Link user to vendor company
       const { error: linkError } = await supabase
         .from('vendor_users')
@@ -209,23 +239,24 @@ export default function VendorProfileCompletion() {
           vendor_company_id: vendorCompany.id
         });
 
-      if (linkError) {
-        console.error('❌ User linking failed:', linkError);
-        throw new Error(`Failed to link user: ${linkError.message}`);
-      }
+      if (linkError) throw linkError;
 
       toast({
-        title: 'Success!',
-        description: 'Profile submitted successfully!'
+        title: 'Profile submitted successfully!',
+        description: 'Your vendor profile is awaiting admin review. You will be notified once approved to proceed with onboarding.'
       });
 
       navigate('/vendors');
     } catch (error: any) {
-      console.error('💥 Submission error:', error);
+      console.error('Profile submission error:', error);
       
+      const errorMessage = error.message?.includes('row-level security') 
+        ? 'Authentication issue detected. Please refresh the page and try again. If the problem persists, please contact support.'
+        : error.message || 'An unexpected error occurred';
+
       toast({
-        title: 'Error',
-        description: error.message || 'Failed to submit profile. Please try again.',
+        title: 'Error submitting profile',
+        description: errorMessage,
         variant: 'destructive'
       });
     } finally {
@@ -682,15 +713,7 @@ export default function VendorProfileCompletion() {
                       Next
                     </Button>
                   ) : (
-                    <Button 
-                      type="submit" 
-                      disabled={loading} 
-                      className="min-w-32"
-                      onClick={(e) => {
-                        console.log('🖱️ Submit button clicked');
-                        // Don't prevent default - let the form submit naturally
-                      }}
-                    >
+                    <Button type="submit" disabled={loading} className="min-w-32">
                       {loading ? 'Submitting...' : 'Submit Profile'}
                     </Button>
                   )}
