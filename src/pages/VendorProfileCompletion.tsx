@@ -45,7 +45,7 @@ const steps = [
 ];
 
 export default function VendorProfileCompletion() {
-  const { user, session } = useAuth();
+  const { user } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
@@ -175,36 +175,9 @@ export default function VendorProfileCompletion() {
       return;
     }
 
-    if (!session) {
-      toast({
-        title: 'Session Error',
-        description: 'Your session has expired. Please refresh the page and try again.',
-        variant: 'destructive'
-      });
-      return;
-    }
-
     setLoading(true);
     try {
-      console.log('Authentication Debug:', {
-        userExists: !!user,
-        userId: user.id,
-        sessionExists: !!session,
-        accessToken: session.access_token ? 'Present' : 'Missing',
-        tokenExpiry: session.expires_at ? new Date(session.expires_at * 1000) : 'Unknown'
-      });
-
-      // Verify current session is still valid
-      const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
-      console.log('Current session check:', { sessionData, sessionError });
-
-      if (sessionError || !sessionData.session) {
-        throw new Error('Session validation failed. Please refresh and try again.');
-      }
-
-      console.log('Submitting vendor company data:', data);
-      
-      // Create vendor company with explicit session context
+      // Create vendor company
       const { data: vendorCompany, error: companyError } = await supabase
         .from('vendor_companies')
         .insert({
@@ -219,17 +192,7 @@ export default function VendorProfileCompletion() {
         .select()
         .single();
 
-      console.log('Company creation result:', { vendorCompany, companyError });
-
-      if (companyError) {
-        console.error('Company creation error details:', {
-          message: companyError.message,
-          details: companyError.details,
-          hint: companyError.hint,
-          code: companyError.code
-        });
-        throw companyError;
-      }
+      if (companyError) throw companyError;
 
       // Link user to vendor company
       const { error: linkError } = await supabase
@@ -248,15 +211,9 @@ export default function VendorProfileCompletion() {
 
       navigate('/vendors');
     } catch (error: any) {
-      console.error('Profile submission error:', error);
-      
-      const errorMessage = error.message?.includes('row-level security') 
-        ? 'Authentication issue detected. Please refresh the page and try again. If the problem persists, please contact support.'
-        : error.message || 'An unexpected error occurred';
-
       toast({
         title: 'Error submitting profile',
-        description: errorMessage,
+        description: error.message || 'An unexpected error occurred',
         variant: 'destructive'
       });
     } finally {
