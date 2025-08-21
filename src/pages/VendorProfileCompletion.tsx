@@ -166,10 +166,20 @@ export default function VendorProfileCompletion() {
   };
 
   const onSubmit = async (data: VendorProfileForm) => {
-    if (!user) return;
+    if (!user) {
+      toast({
+        title: 'Authentication Error',
+        description: 'You must be logged in to submit your profile.',
+        variant: 'destructive'
+      });
+      return;
+    }
 
     setLoading(true);
     try {
+      console.log('User ID:', user.id);
+      console.log('Submitting vendor company data:', data);
+      
       // Create vendor company
       const { data: vendorCompany, error: companyError } = await supabase
         .from('vendor_companies')
@@ -184,6 +194,8 @@ export default function VendorProfileCompletion() {
         })
         .select()
         .single();
+
+      console.log('Company creation result:', { vendorCompany, companyError });
 
       if (companyError) throw companyError;
 
