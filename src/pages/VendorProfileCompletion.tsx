@@ -166,7 +166,10 @@ export default function VendorProfileCompletion() {
   };
 
   const onSubmit = async (data: VendorProfileForm) => {
+    console.log('🚀 Starting form submission with data:', data);
+    
     if (!user) {
+      console.error('❌ No user found during submission');
       toast({
         title: 'Authentication Error',
         description: 'You must be logged in to submit your profile.',
@@ -175,8 +178,12 @@ export default function VendorProfileCompletion() {
       return;
     }
 
+    console.log('✅ User authenticated:', { userId: user.id, email: user.email });
+
     setLoading(true);
     try {
+      console.log('📤 Creating vendor company...');
+      
       // Create vendor company
       const { data: vendorCompany, error: companyError } = await supabase
         .from('vendor_companies')
@@ -192,8 +199,15 @@ export default function VendorProfileCompletion() {
         .select()
         .single();
 
-      if (companyError) throw companyError;
+      console.log('🏢 Company creation result:', { vendorCompany, companyError });
 
+      if (companyError) {
+        console.error('❌ Company creation failed:', companyError);
+        throw companyError;
+      }
+
+      console.log('🔗 Linking user to vendor company...');
+      
       // Link user to vendor company
       const { error: linkError } = await supabase
         .from('vendor_users')
@@ -202,7 +216,14 @@ export default function VendorProfileCompletion() {
           vendor_company_id: vendorCompany.id
         });
 
-      if (linkError) throw linkError;
+      console.log('🔗 User link result:', { linkError });
+
+      if (linkError) {
+        console.error('❌ User linking failed:', linkError);
+        throw linkError;
+      }
+
+      console.log('✅ Profile submission completed successfully!');
 
       toast({
         title: 'Profile submitted successfully!',
@@ -211,9 +232,15 @@ export default function VendorProfileCompletion() {
 
       navigate('/vendors');
     } catch (error: any) {
+      console.error('💥 Profile submission error:', error);
+      
+      const errorMessage = error.message?.includes('row-level security') 
+        ? 'Permission denied. Please refresh the page and try again.'
+        : error.message || 'An unexpected error occurred';
+      
       toast({
         title: 'Error submitting profile',
-        description: error.message || 'An unexpected error occurred',
+        description: errorMessage,
         variant: 'destructive'
       });
     } finally {
