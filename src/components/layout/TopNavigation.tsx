@@ -1,7 +1,8 @@
-import { Search, Bell, User, Plus, Menu } from 'lucide-react';
+import { Search, Bell, User, Plus, Menu, LogOut, Settings } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { useAuth } from '@/components/auth/AuthProvider';
 import { supabase } from '@/integrations/supabase/client';
 import { useState, useEffect } from 'react';
@@ -11,8 +12,16 @@ interface TopNavigationProps {
 }
 
 export function TopNavigation({ onSidebarToggle }: TopNavigationProps) {
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
   const [userProfile, setUserProfile] = useState<{ role: string; first_name?: string; last_name?: string } | null>(null);
+
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+    } catch (error) {
+      console.error('Error signing out:', error);
+    }
+  };
 
   useEffect(() => {
     async function fetchUserProfile() {
@@ -98,9 +107,39 @@ export function TopNavigation({ onSidebarToggle }: TopNavigationProps) {
             <div className="text-sm font-medium text-foreground">{getDisplayName()}</div>
             <div className="text-xs text-muted-foreground">{getRoleDisplay()}</div>
           </div>
-          <Button variant="ghost" size="sm" className="w-8 h-8 rounded-full p-0">
-            <User className="h-5 w-5" />
-          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="sm" className="w-8 h-8 rounded-full p-0 hover-scale">
+                <User className="h-5 w-5" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-56 bg-background border border-border shadow-lg z-50">
+              <DropdownMenuLabel className="font-normal">
+                <div className="flex flex-col space-y-1">
+                  <p className="text-sm font-medium leading-none">{getDisplayName()}</p>
+                  <p className="text-xs leading-none text-muted-foreground">
+                    {user?.email}
+                  </p>
+                  <p className="text-xs leading-none text-muted-foreground">
+                    {getRoleDisplay()}
+                  </p>
+                </div>
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem className="hover:bg-secondary cursor-pointer">
+                <Settings className="mr-2 h-4 w-4" />
+                <span>Settings</span>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem 
+                onClick={handleSignOut}
+                className="hover:bg-destructive/10 hover:text-destructive cursor-pointer text-destructive"
+              >
+                <LogOut className="mr-2 h-4 w-4" />
+                <span>Sign out</span>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
     </header>
