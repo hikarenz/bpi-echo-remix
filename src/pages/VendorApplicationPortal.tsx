@@ -355,6 +355,24 @@ export default function VendorApplicationPortal() {
                             >
                               <Eye className="h-4 w-4" />
                             </Button>
+                            {vendor.status === 'profile_pending' && (
+                              <>
+                                <Button
+                                  variant="default"
+                                  size="sm"
+                                  onClick={() => updateVendorStatus(vendor.id, 'profile_approved')}
+                                >
+                                  <CheckCircle className="h-4 w-4" />
+                                </Button>
+                                <Button
+                                  variant="destructive"
+                                  size="sm"
+                                  onClick={() => updateVendorStatus(vendor.id, 'profile_rejected')}
+                                >
+                                  <XCircle className="h-4 w-4" />
+                                </Button>
+                              </>
+                            )}
                             <Button
                               variant="outline"
                               size="sm"
