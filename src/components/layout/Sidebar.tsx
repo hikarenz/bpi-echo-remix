@@ -43,7 +43,7 @@ export function Sidebar({ open, onToggle }: SidebarProps) {
             <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center">
               <span className="text-sm font-bold text-primary-foreground">V</span>
             </div>
-            <span className="font-semibold text-sidebar-foreground">VendorPro</span>
+            <span className="font-semibold text-sidebar-foreground">Echo Helps</span>
           </div>
         )}
         
