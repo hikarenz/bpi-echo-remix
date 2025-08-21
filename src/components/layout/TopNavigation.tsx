@@ -24,7 +24,7 @@ export function TopNavigation({ onSidebarToggle }: TopNavigationProps) {
           <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center">
             <span className="text-sm font-bold text-primary-foreground">V</span>
           </div>
-          <span className="text-xl font-semibold text-gradient">VendorPro</span>
+          <span className="text-xl font-semibold text-gradient">Echo Helps</span>
         </div>
       </div>
 
