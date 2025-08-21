@@ -681,16 +681,19 @@ export default function VendorProfileCompletion() {
                     <Button type="button" onClick={handleNext}>
                       Next
                     </Button>
-                   ) : (
+                  ) : (
                     <Button 
                       type="submit" 
                       disabled={loading} 
                       className="min-w-32"
-                      onClick={() => console.log('🖱️ Submit button clicked')}
+                      onClick={(e) => {
+                        console.log('🖱️ Submit button clicked');
+                        // Don't prevent default - let the form submit naturally
+                      }}
                     >
                       {loading ? 'Submitting...' : 'Submit Profile'}
                     </Button>
-                   )}
+                  )}
                 </div>
               </form>
             </Form>
