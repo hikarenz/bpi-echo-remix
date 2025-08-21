@@ -1,12 +1,9 @@
 import { NavLink } from 'react-router-dom';
+import { useAuth } from '@/components/auth/AuthProvider';
 import { 
   LayoutDashboard, 
-  ClipboardCheck, 
-  UserPlus, 
-  Activity, 
-  RefreshCw, 
-  ArrowLeft,
-  ChevronLeft
+  ChevronLeft,
+  LogOut
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -17,15 +14,16 @@ interface VendorSidebarProps {
 }
 
 const vendorNavigationItems = [
-  { name: 'Vendor Dashboard', href: '/vendors', icon: LayoutDashboard },
-  { name: 'Existing Dashboard', href: '/vendors/dashboard', icon: Activity },
-  { name: 'Evaluation', href: '/vendors/evaluation', icon: ClipboardCheck },
-  { name: 'Active Management', href: '/vendors/active-management', icon: UserPlus },
-  { name: 'Renewal', href: '/vendors/renewal', icon: RefreshCw },
-  { name: 'Back', href: '/', icon: ArrowLeft },
+  { name: 'My Status', href: '/vendors', icon: LayoutDashboard },
 ];
 
 export function VendorSidebar({ open, onToggle }: VendorSidebarProps) {
+  const { signOut } = useAuth();
+
+  const handleSignOut = async () => {
+    await signOut();
+  };
+
   return (
     <aside
       className={cn(
@@ -79,16 +77,16 @@ export function VendorSidebar({ open, onToggle }: VendorSidebarProps) {
         </ul>
       </nav>
 
-      {open && (
-        <div className="p-4 border-t border-sidebar-border">
-          <div className="bg-sidebar-accent rounded-lg p-3 text-sm">
-            <p className="font-medium text-sidebar-accent-foreground mb-1">Vendor Management</p>
-            <p className="text-xs text-muted-foreground">
-              Manage all vendor relationships and compliance.
-            </p>
-          </div>
-        </div>
-      )}
+      <div className="p-4 border-t border-sidebar-border">
+        <Button
+          variant="ghost"
+          onClick={handleSignOut}
+          className="w-full justify-start text-sidebar-foreground hover:bg-sidebar-accent"
+        >
+          <LogOut className="h-5 w-5 flex-shrink-0" />
+          {open && <span className="ml-3">Sign Out</span>}
+        </Button>
+      </div>
     </aside>
   );
 }

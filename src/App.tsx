@@ -16,8 +16,7 @@ import Evaluation from "./pages/Evaluation";
 import Onboarding from "./pages/Onboarding";
 import NotFound from "./pages/NotFound";
 import VendorDashboard from "./pages/VendorDashboard";
-import VendorActiveManagement from "./pages/VendorActiveManagement";
-import VendorRenewal from "./pages/VendorRenewal";
+import VendorProfileCompletion from "./pages/VendorProfileCompletion";
 import ManageVendors from "./pages/ManageVendors";
 import VendorApplicationPortal from "./pages/VendorApplicationPortal";
 import AddVendor from "./pages/AddVendor";
@@ -53,10 +52,7 @@ const App = () => (
             
             <Route path="/vendors" element={<AuthGuard><VendorLayout /></AuthGuard>}>
               <Route index element={<VendorDashboard />} />
-              <Route path="dashboard" element={<Dashboard />} />
-              <Route path="evaluation" element={<Evaluation />} />
-              <Route path="active-management" element={<VendorActiveManagement />} />
-              <Route path="renewal" element={<VendorRenewal />} />
+              <Route path="complete-profile" element={<VendorProfileCompletion />} />
             </Route>
             
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
