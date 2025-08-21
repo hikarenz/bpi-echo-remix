@@ -9,9 +9,13 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
+import { Calendar } from '@/components/ui/calendar';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
-import { Plus, Send, Eye, Clock, CheckCircle, XCircle, AlertTriangle } from 'lucide-react';
+import { format } from 'date-fns';
+import { cn } from '@/lib/utils';
+import { Plus, Send, Eye, Clock, CheckCircle, XCircle, AlertTriangle, CalendarIcon } from 'lucide-react';
 
 interface VendorCompany {
   id: string;
@@ -63,6 +67,10 @@ export default function VendorApplicationPortal() {
     contract_end_date: '',
   });
 
+  // Date states for the calendar components
+  const [contractStartDate, setContractStartDate] = useState<Date>();
+  const [contractEndDate, setContractEndDate] = useState<Date>();
+
   useEffect(() => {
     fetchVendors();
     fetchInvitations();
@@ -112,9 +120,16 @@ export default function VendorApplicationPortal() {
 
   const createVendor = async () => {
     try {
+      // Prepare vendor data with proper date formatting
+      const vendorData = {
+        ...newVendor,
+        contract_start_date: contractStartDate ? format(contractStartDate, 'yyyy-MM-dd') : null,
+        contract_end_date: contractEndDate ? format(contractEndDate, 'yyyy-MM-dd') : null,
+      };
+
       const { data, error } = await supabase
         .from('vendor_companies')
-        .insert([newVendor])
+        .insert([vendorData])
         .select()
         .single();
 
@@ -134,6 +149,8 @@ export default function VendorApplicationPortal() {
         contract_start_date: '',
         contract_end_date: '',
       });
+      setContractStartDate(undefined);
+      setContractEndDate(undefined);
 
       toast({
         title: "Success",
@@ -445,22 +462,62 @@ export default function VendorApplicationPortal() {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="contract_start_date">Contract Start Date</Label>
-              <Input
-                id="contract_start_date"
-                type="date"
-                value={newVendor.contract_start_date}
-                onChange={(e) => setNewVendor({ ...newVendor, contract_start_date: e.target.value })}
-              />
+              <Label>Contract Start Date</Label>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className={cn(
+                      "w-full justify-start text-left font-normal",
+                      !contractStartDate && "text-muted-foreground"
+                    )}
+                  >
+                    <CalendarIcon className="mr-2 h-4 w-4" />
+                    {contractStartDate ? format(contractStartDate, "PPP") : <span>Pick a start date</span>}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={contractStartDate}
+                    onSelect={setContractStartDate}
+                    disabled={(date) =>
+                      contractEndDate ? date > contractEndDate : false
+                    }
+                    initialFocus
+                    className="pointer-events-auto"
+                  />
+                </PopoverContent>
+              </Popover>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="contract_end_date">Contract End Date</Label>
-              <Input
-                id="contract_end_date"
-                type="date"
-                value={newVendor.contract_end_date}
-                onChange={(e) => setNewVendor({ ...newVendor, contract_end_date: e.target.value })}
-              />
+              <Label>Contract End Date</Label>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className={cn(
+                      "w-full justify-start text-left font-normal",
+                      !contractEndDate && "text-muted-foreground"
+                    )}
+                  >
+                    <CalendarIcon className="mr-2 h-4 w-4" />
+                    {contractEndDate ? format(contractEndDate, "PPP") : <span>Pick an end date</span>}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={contractEndDate}
+                    onSelect={setContractEndDate}
+                    disabled={(date) =>
+                      contractStartDate ? date < contractStartDate : false
+                    }
+                    initialFocus
+                    className="pointer-events-auto"
+                  />
+                </PopoverContent>
+              </Popover>
             </div>
           </div>
           <div className="flex justify-end gap-2">
