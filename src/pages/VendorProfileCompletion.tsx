@@ -167,6 +167,9 @@ export default function VendorProfileCompletion() {
 
   const onSubmit = async (data: VendorProfileForm) => {
     console.log('🚀 Starting form submission with data:', data);
+    console.log('📋 Current form state:', form.formState);
+    console.log('🔍 Form values:', form.getValues());
+    console.log('❌ Form errors:', form.formState.errors);
     
     if (!user) {
       console.error('❌ No user found during submission');
@@ -179,6 +182,21 @@ export default function VendorProfileCompletion() {
     }
 
     console.log('✅ User authenticated:', { userId: user.id, email: user.email });
+
+    // Validate all required fields before submission
+    console.log('🔎 Validating all form fields...');
+    const isValid = await form.trigger();
+    console.log('✅ Form validation result:', isValid);
+    
+    if (!isValid) {
+      console.error('❌ Form validation failed');
+      toast({
+        title: 'Validation Error',
+        description: 'Please check all required fields and fix any errors before submitting.',
+        variant: 'destructive'
+      });
+      return;
+    }
 
     setLoading(true);
     try {
