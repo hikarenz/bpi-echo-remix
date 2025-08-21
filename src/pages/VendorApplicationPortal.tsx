@@ -46,6 +46,7 @@ export default function VendorApplicationPortal() {
   const [selectedVendor, setSelectedVendor] = useState<VendorCompany | null>(null);
   const [showAddVendor, setShowAddVendor] = useState(false);
   const [showInviteDialog, setShowInviteDialog] = useState(false);
+  const [generatedLink, setGeneratedLink] = useState<string | null>(null);
   const { toast } = useToast();
 
   // Form states
@@ -165,17 +166,14 @@ export default function VendorApplicationPortal() {
       if (error) throw error;
 
       const inviteLink = `${window.location.origin}/auth?token=${invitationToken}`;
+      setGeneratedLink(inviteLink);
       
       toast({
         title: "Invitation Created",
-        description: "Copy this secure link to send to the vendor:",
+        description: "Secure invitation link generated successfully",
       });
 
-      // Copy to clipboard
-      navigator.clipboard.writeText(inviteLink);
-
       fetchInvitations();
-      setShowInviteDialog(false);
     } catch (error) {
       console.error('Error creating invitation:', error);
       toast({
@@ -465,8 +463,13 @@ export default function VendorApplicationPortal() {
       </Dialog>
 
       {/* Send Invitation Dialog */}
-      <Dialog open={showInviteDialog} onOpenChange={setShowInviteDialog}>
-        <DialogContent>
+      <Dialog open={showInviteDialog} onOpenChange={(open) => {
+        setShowInviteDialog(open);
+        if (!open) {
+          setGeneratedLink(null);
+        }
+      }}>
+        <DialogContent className="max-w-md">
           <DialogHeader>
             <DialogTitle>Send Vendor Invitation</DialogTitle>
             <DialogDescription>
@@ -482,15 +485,50 @@ export default function VendorApplicationPortal() {
                 className="bg-muted"
               />
             </div>
+            
+            {generatedLink && (
+              <div className="space-y-2">
+                <Label>Generated Invitation Link</Label>
+                <div className="flex gap-2">
+                  <Input 
+                    value={generatedLink}
+                    readOnly
+                    className="font-mono text-xs"
+                  />
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      navigator.clipboard.writeText(generatedLink);
+                      toast({
+                        title: "Copied!",
+                        description: "Link copied to clipboard",
+                      });
+                    }}
+                  >
+                    Copy
+                  </Button>
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  Link expires in 7 days. Send this to the vendor to complete their onboarding.
+                </p>
+              </div>
+            )}
+            
             <div className="flex justify-end gap-2">
-              <Button variant="outline" onClick={() => setShowInviteDialog(false)}>
-                Cancel
+              <Button variant="outline" onClick={() => {
+                setShowInviteDialog(false);
+                setGeneratedLink(null);
+              }}>
+                {generatedLink ? 'Close' : 'Cancel'}
               </Button>
-              <Button 
-                onClick={() => selectedVendor && createInvitation(selectedVendor.id, selectedVendor.company_email)}
-              >
-                Generate Invitation Link
-              </Button>
+              {!generatedLink && (
+                <Button 
+                  onClick={() => selectedVendor && createInvitation(selectedVendor.id, selectedVendor.company_email)}
+                >
+                  Generate Invitation Link
+                </Button>
+              )}
             </div>
           </div>
         </DialogContent>
