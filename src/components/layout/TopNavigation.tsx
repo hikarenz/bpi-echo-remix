@@ -39,11 +39,6 @@ export function TopNavigation({ onSidebarToggle }: TopNavigationProps) {
       </div>
 
       <div className="flex items-center gap-3">
-        <Button variant="default" size="sm" className="bg-gradient-primary hover:bg-primary-hover glow-primary">
-          <Plus className="h-4 w-4 mr-2" />
-          Quick Add
-        </Button>
-        
         <Button variant="ghost" size="sm" className="relative">
           <Bell className="h-5 w-5" />
           <Badge className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center text-xs bg-destructive">
