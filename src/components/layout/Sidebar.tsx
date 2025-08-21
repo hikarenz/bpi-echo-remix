@@ -21,6 +21,7 @@ const navigationItems = [
   { name: 'Dashboard', href: '/', icon: LayoutDashboard },
   { name: 'Manage Vendors', href: '/manage-vendors', icon: UserPlus },
   { name: 'Vendors', href: '/vendors', icon: Activity },
+  { name: 'Echo AI', href: '/echo-ai', icon: Bot },
 ];
 
 export function Sidebar({ open, onToggle }: SidebarProps) {
