@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { DashboardLayout } from "./components/layout/DashboardLayout";
 import { VendorLayout } from "./components/layout/VendorLayout";
+import { ManageVendorsLayout } from "./components/layout/ManageVendorsLayout";
 import Dashboard from "./pages/Dashboard";
 import Evaluation from "./pages/Evaluation";
 import Onboarding from "./pages/Onboarding";
@@ -13,6 +14,9 @@ import VendorDashboard from "./pages/VendorDashboard";
 import VendorActiveManagement from "./pages/VendorActiveManagement";
 import VendorRenewal from "./pages/VendorRenewal";
 import ManageVendors from "./pages/ManageVendors";
+import VendorApplicationPortal from "./pages/VendorApplicationPortal";
+import AddVendor from "./pages/AddVendor";
+import RemoveVendor from "./pages/RemoveVendor";
 
 const queryClient = new QueryClient();
 
@@ -31,7 +35,13 @@ const App = () => (
             <Route path="renewal-exit" element={<div className="p-8 text-center text-muted-foreground">Renewal/Exit page coming soon...</div>} />
             <Route path="offboarding" element={<div className="p-8 text-center text-muted-foreground">Offboarding page coming soon...</div>} />
             <Route path="echo-ai" element={<div className="p-8 text-center text-muted-foreground">Echo AI page coming soon...</div>} />
-            <Route path="manage-vendors" element={<ManageVendors />} />
+          </Route>
+          
+          <Route path="/manage-vendors" element={<ManageVendorsLayout />}>
+            <Route index element={<ManageVendors />} />
+            <Route path="application-portal" element={<VendorApplicationPortal />} />
+            <Route path="add-vendor" element={<AddVendor />} />
+            <Route path="remove-vendor" element={<RemoveVendor />} />
           </Route>
           
           <Route path="/vendors" element={<VendorLayout />}>
