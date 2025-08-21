@@ -175,46 +175,16 @@ export default function VendorProfileCompletion() {
       return;
     }
 
-    if (!session) {
-      toast({
-        title: 'Session Error',
-        description: 'Your session has expired. Please refresh the page and try again.',
-        variant: 'destructive'
-      });
-      return;
-    }
-
     setLoading(true);
     try {
-      console.log('Authentication Debug:', {
-        userExists: !!user,
-        userId: user.id,
-        sessionExists: !!session,
-        accessToken: session.access_token ? 'Present' : 'Missing',
-        tokenExpiry: session.expires_at ? new Date(session.expires_at * 1000) : 'Unknown'
-      });
-
-      // Verify current session is still valid
-      const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
-      console.log('Current session check:', { sessionData, sessionError });
-
-      if (sessionError || !sessionData.session) {
-        throw new Error('Session validation failed. Please refresh and try again.');
-      }
-
-      console.log('Submitting vendor company data:', data);
+      console.log('🚀 Starting profile submission for user:', user.id);
       
-      // Create vendor company with explicit session context
+      // Create vendor company with minimal required fields
       const { data: vendorCompany, error: companyError } = await supabase
         .from('vendor_companies')
         .insert({
           company_name: data.company_name,
-          company_email: data.company_email,
-          company_address: data.company_address,
-          contact_person: data.contact_person,
-          contact_phone: data.contact_phone,
-          status: 'profile_pending',
-          profile_submitted_at: new Date().toISOString()
+          company_email: data.company_email
         })
         .select()
         .single();
@@ -222,13 +192,8 @@ export default function VendorProfileCompletion() {
       console.log('Company creation result:', { vendorCompany, companyError });
 
       if (companyError) {
-        console.error('Company creation error details:', {
-          message: companyError.message,
-          details: companyError.details,
-          hint: companyError.hint,
-          code: companyError.code
-        });
-        throw companyError;
+        console.error('Company creation failed:', companyError);
+        throw new Error(`Failed to create company: ${companyError.message}`);
       }
 
       // Link user to vendor company
@@ -239,24 +204,25 @@ export default function VendorProfileCompletion() {
           vendor_company_id: vendorCompany.id
         });
 
-      if (linkError) throw linkError;
+      console.log('User link result:', { linkError });
+
+      if (linkError) {
+        console.error('User linking failed:', linkError);
+        throw new Error(`Failed to link user: ${linkError.message}`);
+      }
 
       toast({
         title: 'Profile submitted successfully!',
-        description: 'Your vendor profile is awaiting admin review. You will be notified once approved to proceed with onboarding.'
+        description: 'Your vendor profile has been created.'
       });
 
-      navigate('/vendors');
+      navigate('/vendor-dashboard');
     } catch (error: any) {
-      console.error('Profile submission error:', error);
+      console.error('❌ Profile submission error:', error);
       
-      const errorMessage = error.message?.includes('row-level security') 
-        ? 'Authentication issue detected. Please refresh the page and try again. If the problem persists, please contact support.'
-        : error.message || 'An unexpected error occurred';
-
       toast({
         title: 'Error submitting profile',
-        description: errorMessage,
+        description: error.message || 'An unexpected error occurred',
         variant: 'destructive'
       });
     } finally {
