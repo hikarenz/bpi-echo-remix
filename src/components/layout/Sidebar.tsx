@@ -1,4 +1,7 @@
 import { NavLink } from 'react-router-dom';
+import { useAuth } from '@/components/auth/AuthProvider';
+import { useState, useEffect } from 'react';
+import { supabase } from '@/integrations/supabase/client';
 import { 
   LayoutDashboard, 
   ClipboardCheck, 
@@ -17,14 +20,43 @@ interface SidebarProps {
   onToggle: () => void;
 }
 
-const navigationItems = [
+const adminNavigationItems = [
   { name: 'Dashboard', href: '/', icon: LayoutDashboard },
   { name: 'Manage Vendors', href: '/manage-vendors', icon: UserPlus },
-  { name: 'Vendors', href: '/vendors', icon: Activity },
   { name: 'Echo AI', href: '/echo-ai', icon: Bot },
 ];
 
 export function Sidebar({ open, onToggle }: SidebarProps) {
+  const { user } = useAuth();
+  const [userRole, setUserRole] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function fetchUserRole() {
+      if (!user) return;
+      
+      try {
+        const { data, error } = await supabase
+          .from('profiles')
+          .select('role')
+          .eq('id', user.id)
+          .single();
+        
+        if (error) throw error;
+        setUserRole(data.role);
+      } catch (error) {
+        console.error('Error fetching user role:', error);
+      }
+    }
+
+    fetchUserRole();
+  }, [user]);
+
+  // If user is a vendor, they shouldn't see this sidebar at all
+  // They should be using VendorLayout instead
+  if (userRole === 'vendor') {
+    return null;
+  }
+
   return (
     <aside
       className={cn(
@@ -56,7 +88,7 @@ export function Sidebar({ open, onToggle }: SidebarProps) {
 
       <nav className="flex-1 px-4 py-2">
         <ul className="space-y-2">
-          {navigationItems.map((item) => (
+          {adminNavigationItems.map((item) => (
             <li key={item.name}>
               <NavLink
                 to={item.href}
