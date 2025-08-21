@@ -2,12 +2,59 @@ import { Search, Bell, User, Plus, Menu } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { useAuth } from '@/components/auth/AuthProvider';
+import { supabase } from '@/integrations/supabase/client';
+import { useState, useEffect } from 'react';
 
 interface TopNavigationProps {
   onSidebarToggle: () => void;
 }
 
 export function TopNavigation({ onSidebarToggle }: TopNavigationProps) {
+  const { user } = useAuth();
+  const [userProfile, setUserProfile] = useState<{ role: string; first_name?: string; last_name?: string } | null>(null);
+
+  useEffect(() => {
+    async function fetchUserProfile() {
+      if (!user) return;
+
+      try {
+        const { data, error } = await supabase
+          .from('profiles')
+          .select('role, first_name, last_name')
+          .eq('id', user.id)
+          .single();
+
+        if (error) throw error;
+        setUserProfile(data);
+      } catch (error) {
+        console.error('Error fetching user profile:', error);
+      }
+    }
+
+    fetchUserProfile();
+  }, [user]);
+
+  const getDisplayName = () => {
+    if (!userProfile) return 'User';
+    if (userProfile.first_name || userProfile.last_name) {
+      return `${userProfile.first_name || ''} ${userProfile.last_name || ''}`.trim();
+    }
+    return user?.email?.split('@')[0] || 'User';
+  };
+
+  const getRoleDisplay = () => {
+    if (!userProfile?.role) return '';
+    switch (userProfile.role) {
+      case 'bpi_admin':
+        return 'BPI Admin';
+      case 'vendor':
+        return 'Vendor';
+      default:
+        return userProfile.role;
+    }
+  };
+
   return (
     <header className="nav-glass h-16 flex items-center justify-between px-6 sticky top-0 z-50">
       <div className="flex items-center gap-4">
@@ -46,9 +93,15 @@ export function TopNavigation({ onSidebarToggle }: TopNavigationProps) {
           </Badge>
         </Button>
         
-        <Button variant="ghost" size="sm" className="w-8 h-8 rounded-full p-0">
-          <User className="h-5 w-5" />
-        </Button>
+        <div className="flex items-center gap-3">
+          <div className="text-right">
+            <div className="text-sm font-medium text-foreground">{getDisplayName()}</div>
+            <div className="text-xs text-muted-foreground">{getRoleDisplay()}</div>
+          </div>
+          <Button variant="ghost" size="sm" className="w-8 h-8 rounded-full p-0">
+            <User className="h-5 w-5" />
+          </Button>
+        </div>
       </div>
     </header>
   );
