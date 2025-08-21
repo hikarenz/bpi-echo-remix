@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/components/auth/AuthProvider';
 import { supabase } from '@/integrations/supabase/client';
@@ -16,6 +16,7 @@ export default function VendorProfileCompletion() {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
+  const [profileLoading, setProfileLoading] = useState(true);
 
   const [formData, setFormData] = useState({
     company_name: '',
@@ -26,6 +27,42 @@ export default function VendorProfileCompletion() {
     category: '',
     description: ''
   });
+
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      if (!user) return;
+
+      try {
+        const { data: profile, error } = await supabase
+          .from('profiles')
+          .select('first_name, last_name, email')
+          .eq('id', user.id)
+          .single();
+
+        if (error) throw error;
+
+        if (profile) {
+          const fullName = [profile.first_name, profile.last_name].filter(Boolean).join(' ');
+          setFormData(prev => ({
+            ...prev,
+            contact_person: fullName,
+            company_email: profile.email
+          }));
+        }
+      } catch (error: any) {
+        console.error('Error fetching profile:', error);
+        toast({
+          title: 'Warning',
+          description: 'Could not load profile data. Please fill in all fields manually.',
+          variant: 'destructive'
+        });
+      } finally {
+        setProfileLoading(false);
+      }
+    };
+
+    fetchUserProfile();
+  }, [user, toast]);
 
   const categories = [
     'Software Development',
@@ -91,6 +128,17 @@ export default function VendorProfileCompletion() {
       setLoading(false);
     }
   };
+
+  if (profileLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
+          <p className="mt-2 text-muted-foreground">Loading profile...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background p-6">
