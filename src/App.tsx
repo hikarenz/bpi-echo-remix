@@ -18,6 +18,7 @@ import Onboarding from "./pages/Onboarding";
 import NotFound from "./pages/NotFound";
 import VendorDashboard from "./pages/VendorDashboard";
 import VendorProfileCompletion from "./pages/VendorProfileCompletion";
+import VendorOnboarding from "./pages/VendorOnboarding";
 import ManageVendors from "./pages/ManageVendors";
 import VendorApplicationPortal from "./pages/VendorApplicationPortal";
 import AddVendor from "./pages/AddVendor";
@@ -55,6 +56,7 @@ const App = () => (
               <Route path="/vendors" element={<AuthGuard><VendorLayout /></AuthGuard>}>
                 <Route index element={<VendorDashboard />} />
                 <Route path="complete-profile" element={<VendorProfileCompletion />} />
+                <Route path="onboarding" element={<VendorOnboarding />} />
               </Route>
               
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

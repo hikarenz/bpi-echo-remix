@@ -24,7 +24,7 @@ interface VendorCompany {
   company_address: string;
   contact_person: string;
   contact_phone: string;
-  status: 'pending' | 'approved' | 'rejected' | 'suspended';
+  status: 'profile_pending' | 'profile_approved' | 'profile_rejected' | 'onboarding_in_progress' | 'fully_approved' | 'pending' | 'approved' | 'rejected' | 'suspended';
   risk_level: 'low' | 'medium' | 'high' | 'critical';
   performance_score: number;
   contract_start_date: string;
@@ -40,7 +40,12 @@ interface VendorInvitation {
   expires_at: string;
   used_at: string | null;
   created_at: string;
-  vendor_companies: VendorCompany;
+    vendor_companies: {
+      id: string;
+      company_name: string;
+      company_email: string;
+      status: 'profile_pending' | 'profile_approved' | 'profile_rejected' | 'onboarding_in_progress' | 'fully_approved' | 'pending' | 'approved' | 'rejected' | 'suspended';
+    };
 }
 
 export default function VendorApplicationPortal() {
@@ -60,7 +65,7 @@ export default function VendorApplicationPortal() {
     company_address: '',
     contact_person: '',
     contact_phone: '',
-    status: 'pending' as const,
+    status: 'profile_pending' as const,
     risk_level: 'medium' as const,
     performance_score: 0,
     contract_start_date: '',
@@ -143,7 +148,7 @@ export default function VendorApplicationPortal() {
         company_address: '',
         contact_person: '',
         contact_phone: '',
-        status: 'pending',
+        status: 'profile_pending',
         risk_level: 'medium',
         performance_score: 0,
         contract_start_date: '',
@@ -205,7 +210,7 @@ export default function VendorApplicationPortal() {
     }
   };
 
-  const updateVendorStatus = async (vendorId: string, status: 'pending' | 'approved' | 'rejected' | 'suspended') => {
+  const updateVendorStatus = async (vendorId: string, status: 'profile_pending' | 'profile_approved' | 'profile_rejected' | 'onboarding_in_progress' | 'fully_approved' | 'pending' | 'approved' | 'rejected' | 'suspended') => {
     try {
       const { error } = await supabase
         .from('vendor_companies')
@@ -234,6 +239,11 @@ export default function VendorApplicationPortal() {
 
   const getStatusBadge = (status: string) => {
     const variants: Record<string, any> = {
+      profile_pending: { variant: "outline", icon: Clock },
+      profile_approved: { variant: "default", icon: CheckCircle },
+      profile_rejected: { variant: "destructive", icon: XCircle },
+      onboarding_in_progress: { variant: "secondary", icon: Clock },
+      fully_approved: { variant: "default", icon: CheckCircle },
       pending: { variant: "outline", icon: Clock },
       approved: { variant: "default", icon: CheckCircle },
       rejected: { variant: "destructive", icon: XCircle },

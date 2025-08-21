@@ -14,7 +14,7 @@ interface VendorCompany {
   company_address: string | null;
   contact_person: string | null;
   contact_phone: string | null;
-  status: 'pending' | 'approved' | 'rejected' | 'suspended';
+  status: 'profile_pending' | 'profile_approved' | 'profile_rejected' | 'onboarding_in_progress' | 'fully_approved' | 'pending' | 'approved' | 'rejected' | 'suspended';
   risk_level: 'low' | 'medium' | 'high' | 'critical';
   contract_start_date: string | null;
   contract_end_date: string | null;
@@ -23,10 +23,12 @@ interface VendorCompany {
 
 const getStatusIcon = (status: string) => {
   switch (status) {
+    case 'profile_approved':
+    case 'fully_approved':
     case 'approved':
       return CheckCircle;
+    case 'profile_rejected':
     case 'rejected':
-      return AlertCircle;
     case 'suspended':
       return AlertCircle;
     default:
@@ -36,12 +38,16 @@ const getStatusIcon = (status: string) => {
 
 const getStatusBadgeVariant = (status: string) => {
   switch (status) {
+    case 'profile_approved':
+    case 'fully_approved':
     case 'approved':
       return 'default';
+    case 'profile_rejected':
     case 'rejected':
-      return 'destructive';
     case 'suspended':
       return 'destructive';
+    case 'onboarding_in_progress':
+      return 'secondary';
     default:
       return 'outline';
   }
@@ -49,6 +55,16 @@ const getStatusBadgeVariant = (status: string) => {
 
 const getStatusMessage = (status: string) => {
   switch (status) {
+    case 'profile_pending':
+      return 'Your vendor profile has been submitted and is awaiting admin review.';
+    case 'profile_approved':
+      return 'Your vendor profile has been approved! You can now access the onboarding workflow.';
+    case 'profile_rejected':
+      return 'Your vendor profile was rejected. Please contact support and resubmit with corrections.';
+    case 'onboarding_in_progress':
+      return 'Your onboarding is in progress. Complete all required steps to become fully approved.';
+    case 'fully_approved':
+      return 'Congratulations! You are now a fully approved vendor in our system.';
     case 'approved':
       return 'Your vendor profile has been approved. You are now an active vendor.';
     case 'rejected':
@@ -231,12 +247,63 @@ export default function VendorDashboard() {
           </CardContent>
         </Card>
 
-        {vendorCompany.status === 'approved' && (
+        {/* Status-specific action cards */}
+        {vendorCompany.status === 'profile_approved' && (
           <Card>
             <CardHeader>
-              <CardTitle className="text-green-600">✓ Congratulations!</CardTitle>
+              <CardTitle className="text-green-600">✓ Profile Approved!</CardTitle>
               <CardDescription>
-                Your vendor profile has been approved. You are now an active vendor in our system.
+                Your vendor profile has been approved. You can now proceed with the onboarding workflow.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Button 
+                onClick={() => navigate('/vendors/onboarding')}
+                className="w-full"
+              >
+                Start Onboarding Process
+              </Button>
+            </CardContent>
+          </Card>
+        )}
+
+        {vendorCompany.status === 'onboarding_in_progress' && (
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-blue-600">📋 Onboarding in Progress</CardTitle>
+              <CardDescription>
+                Complete all onboarding steps to become a fully approved vendor.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Button 
+                onClick={() => navigate('/vendors/onboarding')}
+                className="w-full"
+                variant="outline"
+              >
+                Continue Onboarding
+              </Button>
+            </CardContent>
+          </Card>
+        )}
+
+        {vendorCompany.status === 'fully_approved' && (
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-green-600">🎉 Fully Approved!</CardTitle>
+              <CardDescription>
+                Congratulations! You are now a fully approved vendor in our system.
+              </CardDescription>
+            </CardHeader>
+          </Card>
+        )}
+
+        {vendorCompany.status === 'profile_rejected' && (
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-red-600">❌ Profile Rejected</CardTitle>
+              <CardDescription>
+                Your vendor profile was rejected. Please contact support and resubmit with corrections.
               </CardDescription>
             </CardHeader>
           </Card>

@@ -199,8 +199,12 @@ export type Database = {
           contract_end_date: string | null
           contract_start_date: string | null
           created_at: string | null
+          final_approval_at: string | null
           id: string
+          onboarding_completed_at: string | null
           performance_score: number | null
+          profile_approved_at: string | null
+          profile_submitted_at: string | null
           risk_level: Database["public"]["Enums"]["risk_level"] | null
           status: Database["public"]["Enums"]["vendor_status"] | null
           updated_at: string | null
@@ -214,8 +218,12 @@ export type Database = {
           contract_end_date?: string | null
           contract_start_date?: string | null
           created_at?: string | null
+          final_approval_at?: string | null
           id?: string
+          onboarding_completed_at?: string | null
           performance_score?: number | null
+          profile_approved_at?: string | null
+          profile_submitted_at?: string | null
           risk_level?: Database["public"]["Enums"]["risk_level"] | null
           status?: Database["public"]["Enums"]["vendor_status"] | null
           updated_at?: string | null
@@ -229,8 +237,12 @@ export type Database = {
           contract_end_date?: string | null
           contract_start_date?: string | null
           created_at?: string | null
+          final_approval_at?: string | null
           id?: string
+          onboarding_completed_at?: string | null
           performance_score?: number | null
+          profile_approved_at?: string | null
+          profile_submitted_at?: string | null
           risk_level?: Database["public"]["Enums"]["risk_level"] | null
           status?: Database["public"]["Enums"]["vendor_status"] | null
           updated_at?: string | null
@@ -343,7 +355,16 @@ export type Database = {
         | "not_submitted"
       risk_level: "low" | "medium" | "high" | "critical"
       user_role: "bpi_admin" | "vendor"
-      vendor_status: "pending" | "approved" | "rejected" | "suspended"
+      vendor_status:
+        | "pending"
+        | "approved"
+        | "rejected"
+        | "suspended"
+        | "profile_pending"
+        | "profile_approved"
+        | "profile_rejected"
+        | "onboarding_in_progress"
+        | "fully_approved"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -479,7 +500,17 @@ export const Constants = {
       ],
       risk_level: ["low", "medium", "high", "critical"],
       user_role: ["bpi_admin", "vendor"],
-      vendor_status: ["pending", "approved", "rejected", "suspended"],
+      vendor_status: [
+        "pending",
+        "approved",
+        "rejected",
+        "suspended",
+        "profile_pending",
+        "profile_approved",
+        "profile_rejected",
+        "onboarding_in_progress",
+        "fully_approved",
+      ],
     },
   },
 } as const

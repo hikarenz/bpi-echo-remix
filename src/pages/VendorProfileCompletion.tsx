@@ -95,7 +95,8 @@ export default function VendorProfileCompletion() {
           company_address: formData.company_address,
           contact_person: formData.contact_person,
           contact_phone: formData.contact_phone,
-          status: 'pending'
+          status: 'profile_pending',
+          profile_submitted_at: new Date().toISOString()
         })
         .select()
         .single();
@@ -114,7 +115,7 @@ export default function VendorProfileCompletion() {
 
       toast({
         title: 'Profile submitted successfully!',
-        description: 'Your vendor profile is now under review. You will be notified once approved.'
+        description: 'Your vendor profile is awaiting admin review. You will be notified once approved to proceed with onboarding.'
       });
 
       navigate('/vendors');
