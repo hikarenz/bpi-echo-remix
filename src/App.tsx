@@ -4,10 +4,14 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { DashboardLayout } from "./components/layout/DashboardLayout";
+import { VendorLayout } from "./components/layout/VendorLayout";
 import Dashboard from "./pages/Dashboard";
 import Evaluation from "./pages/Evaluation";
 import Onboarding from "./pages/Onboarding";
 import NotFound from "./pages/NotFound";
+import VendorDashboard from "./pages/VendorDashboard";
+import VendorActiveManagement from "./pages/VendorActiveManagement";
+import VendorRenewal from "./pages/VendorRenewal";
 
 const queryClient = new QueryClient();
 
@@ -27,6 +31,15 @@ const App = () => (
             <Route path="offboarding" element={<div className="p-8 text-center text-muted-foreground">Offboarding page coming soon...</div>} />
             <Route path="echo-ai" element={<div className="p-8 text-center text-muted-foreground">Echo AI page coming soon...</div>} />
           </Route>
+          
+          <Route path="/vendors" element={<VendorLayout />}>
+            <Route index element={<VendorDashboard />} />
+            <Route path="dashboard" element={<Dashboard />} />
+            <Route path="evaluation" element={<Evaluation />} />
+            <Route path="active-management" element={<VendorActiveManagement />} />
+            <Route path="renewal" element={<VendorRenewal />} />
+          </Route>
+          
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
