@@ -191,6 +191,7 @@ export type Database = {
       }
       vendor_companies: {
         Row: {
+          category: string | null
           company_address: string | null
           company_email: string
           company_name: string
@@ -210,6 +211,7 @@ export type Database = {
           updated_at: string | null
         }
         Insert: {
+          category?: string | null
           company_address?: string | null
           company_email: string
           company_name: string
@@ -229,6 +231,7 @@ export type Database = {
           updated_at?: string | null
         }
         Update: {
+          category?: string | null
           company_address?: string | null
           company_email?: string
           company_name?: string

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -15,54 +15,31 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
+import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/hooks/use-toast';
 
-const vendors = [
-  {
-    id: 1,
-    name: 'TechCorp Solutions',
-    category: 'Software Development',
-    status: 'Active',
-    location: 'San Francisco, CA',
-    contractEnd: '2024-12-31',
-    riskLevel: 'Low',
-  },
-  {
-    id: 2,
-    name: 'SecureData Inc',
-    category: 'Cybersecurity',
-    status: 'Active',
-    location: 'Austin, TX',
-    contractEnd: '2024-09-15',
-    riskLevel: 'Medium',
-  },
-  {
-    id: 3,
-    name: 'CloudHost Pro',
-    category: 'Infrastructure',
-    status: 'Under Review',
-    location: 'Seattle, WA',
-    contractEnd: '2025-03-20',
-    riskLevel: 'Low',
-  },
-  {
-    id: 4,
-    name: 'DataAnalytics Plus',
-    category: 'Analytics',
-    status: 'Active',
-    location: 'New York, NY',
-    contractEnd: '2024-11-10',
-    riskLevel: 'High',
-  },
-];
+interface Vendor {
+  id: string;
+  name: string;
+  category: string;
+  status: string;
+  location: string;
+  contractEnd: string;
+  riskLevel: string;
+}
 
 const getStatusBadgeVariant = (status: string) => {
   switch (status) {
-    case 'Active':
+    case 'approved':
       return 'default';
-    case 'Under Review':
+    case 'profile_pending':
+    case 'onboarding_in_progress':
       return 'secondary';
-    case 'Pending':
+    case 'pending':
       return 'outline';
+    case 'rejected':
+    case 'suspended':
+      return 'destructive';
     default:
       return 'default';
   }
@@ -70,24 +47,101 @@ const getStatusBadgeVariant = (status: string) => {
 
 const getRiskBadgeVariant = (risk: string) => {
   switch (risk) {
-    case 'Low':
+    case 'low':
       return 'default';
-    case 'Medium':
+    case 'medium':
       return 'secondary';
-    case 'High':
+    case 'high':
+      return 'destructive';
+    case 'critical':
       return 'destructive';
     default:
       return 'default';
   }
 };
 
+const formatStatus = (status: string) => {
+  switch (status) {
+    case 'approved':
+      return 'Active';
+    case 'profile_pending':
+      return 'Profile Pending';
+    case 'onboarding_in_progress':
+      return 'Onboarding';
+    case 'pending':
+      return 'Pending';
+    case 'rejected':
+      return 'Rejected';
+    case 'suspended':
+      return 'Suspended';
+    default:
+      return status;
+  }
+};
+
+const formatRiskLevel = (risk: string) => {
+  return risk.charAt(0).toUpperCase() + risk.slice(1);
+};
+
 export default function ManageVendors() {
   const [searchTerm, setSearchTerm] = useState('');
+  const [vendors, setVendors] = useState<Vendor[]>([]);
+  const [loading, setLoading] = useState(true);
+  const { toast } = useToast();
+
+  useEffect(() => {
+    fetchVendors();
+  }, []);
+
+  const fetchVendors = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('vendor_companies')
+        .select('*')
+        .order('company_name');
+
+      if (error) throw error;
+
+      const transformedVendors: Vendor[] = data.map(vendor => ({
+        id: vendor.id,
+        name: vendor.company_name,
+        category: vendor.category || 'Uncategorized',
+        status: vendor.status,
+        location: vendor.company_address || 'No address provided',
+        contractEnd: vendor.contract_end_date || 'No end date',
+        riskLevel: vendor.risk_level,
+      }));
+
+      setVendors(transformedVendors);
+    } catch (error) {
+      console.error('Error fetching vendors:', error);
+      toast({
+        title: "Error",
+        description: "Failed to fetch vendors. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
   
   const filteredVendors = vendors.filter(vendor =>
     vendor.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     vendor.category.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  if (loading) {
+    return (
+      <div className="space-y-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight">Manage Vendors</h1>
+            <p className="text-muted-foreground">Loading vendors...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -127,10 +181,10 @@ export default function ManageVendors() {
                 </div>
                 <div className="flex flex-col gap-2">
                   <Badge variant={getStatusBadgeVariant(vendor.status)}>
-                    {vendor.status}
+                    {formatStatus(vendor.status)}
                   </Badge>
                   <Badge variant={getRiskBadgeVariant(vendor.riskLevel)}>
-                    {vendor.riskLevel} Risk
+                    {formatRiskLevel(vendor.riskLevel)} Risk
                   </Badge>
                 </div>
               </div>
