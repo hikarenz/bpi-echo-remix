@@ -283,10 +283,6 @@ export default function ManageVendors() {
             Add, edit, and manage your vendor relationships
           </p>
         </div>
-        <Button>
-          <Plus className="mr-2 h-4 w-4" />
-          Add New Vendor
-        </Button>
       </div>
 
       <div className="flex items-center space-x-2">
