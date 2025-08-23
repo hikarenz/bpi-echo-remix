@@ -337,10 +337,10 @@ export default function VendorApplicationPortal() {
         </TabsList>
 
         <TabsContent value="vendors">
-          <Card>
+          <Card className="card-glossy-hover">
             <CardHeader>
-              <CardTitle>Vendor Companies</CardTitle>
-              <CardDescription>
+              <CardTitle className="text-gradient">Vendor Companies</CardTitle>
+              <CardDescription className="text-muted-foreground/80">
                 Manage all vendor companies and their application status
               </CardDescription>
             </CardHeader>
@@ -430,10 +430,10 @@ export default function VendorApplicationPortal() {
         </TabsContent>
 
         <TabsContent value="invitations">
-          <Card>
+          <Card className="card-glossy-hover">
             <CardHeader>
-              <CardTitle>Vendor Invitations</CardTitle>
-              <CardDescription>
+              <CardTitle className="text-gradient">Vendor Invitations</CardTitle>
+              <CardDescription className="text-muted-foreground/80">
                 Track sent invitations and their status
               </CardDescription>
             </CardHeader>

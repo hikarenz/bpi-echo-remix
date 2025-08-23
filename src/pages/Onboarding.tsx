@@ -125,9 +125,9 @@ export default function Onboarding() {
       </div>
 
       {/* Top Panel - Contract Management */}
-      <Card className="glass-card">
+      <Card className="card-glossy-hover">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
+          <CardTitle className="flex items-center gap-2 text-gradient">
             <FileText className="h-5 w-5 text-primary" />
             Contract Management
           </CardTitle>
@@ -135,7 +135,7 @@ export default function Onboarding() {
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {contracts.map((contract) => (
-              <Card key={contract.id} className="border border-border/50 hover:border-primary/30 transition-all">
+              <Card key={contract.id} className="card-glossy-hover transition-all duration-300">
                 <CardContent className="p-4">
                   <div className="flex items-start justify-between mb-3">
                     <h4 className="font-medium text-sm">{contract.vendor}</h4>
@@ -169,10 +169,10 @@ export default function Onboarding() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Center Panel - Payment Setup Tracker */}
         <div className="lg:col-span-2">
-          <Card className="glass-card">
+          <Card className="card-glossy-hover">
             <CardHeader>
               <CardTitle className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 text-gradient">
                   <CreditCard className="h-5 w-5 text-primary" />
                   Payment Setup Tracker
                 </div>
@@ -211,9 +211,9 @@ export default function Onboarding() {
 
         {/* Right Sidebar - Legal/Compliance Checklist */}
         <div className="lg:col-span-1">
-          <Card className="glass-card">
+          <Card className="card-glossy-hover">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
+              <CardTitle className="flex items-center gap-2 text-gradient">
                 <Shield className="h-5 w-5 text-primary" />
                 Compliance Checklist
               </CardTitle>
@@ -231,10 +231,10 @@ export default function Onboarding() {
       </div>
 
       {/* Bottom Panel - Vendor Directory */}
-      <Card className="glass-card">
+      <Card className="card-glossy-hover">
         <CardHeader>
           <CardTitle className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 text-gradient">
               <Users className="h-5 w-5 text-primary" />
               Vendor Directory
             </div>

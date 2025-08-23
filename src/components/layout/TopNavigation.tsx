@@ -65,19 +65,19 @@ export function TopNavigation({ onSidebarToggle }: TopNavigationProps) {
   };
 
   return (
-    <header className="nav-glass h-16 flex items-center justify-between px-6 sticky top-0 z-50">
+    <header className="nav-glass h-16 flex items-center justify-between px-6 sticky top-0 z-50 border-b border-border/50 backdrop-blur-xl">
       <div className="flex items-center gap-4">
         <Button
           variant="ghost"
           size="sm"
           onClick={onSidebarToggle}
-          className="lg:hidden"
+          className="lg:hidden hover:bg-accent/10 backdrop-blur-sm"
         >
           <Menu className="h-5 w-5" />
         </Button>
         
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center">
+          <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center shadow-md glow-primary">
             <span className="text-sm font-bold text-primary-foreground">V</span>
           </div>
           <span className="text-xl font-semibold text-gradient">Echo Helps</span>
@@ -113,7 +113,7 @@ export function TopNavigation({ onSidebarToggle }: TopNavigationProps) {
                 <User className="h-5 w-5" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56 bg-background border border-border shadow-lg z-50">
+            <DropdownMenuContent align="end" className="w-56 bg-gradient-to-br from-background to-background/95 border border-border/50 shadow-xl backdrop-blur-xl z-50">
               <DropdownMenuLabel className="font-normal">
                 <div className="flex flex-col space-y-1">
                   <p className="text-sm font-medium leading-none">{getDisplayName()}</p>

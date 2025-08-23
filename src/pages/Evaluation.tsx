@@ -76,9 +76,9 @@ export default function Evaluation() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left Panel - Vendor Application Tracker */}
         <div className="lg:col-span-1">
-          <Card className="glass-card">
+          <Card className="card-glossy-hover">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
+              <CardTitle className="flex items-center gap-2 text-gradient">
                 <FileText className="h-5 w-5 text-primary" />
                 Vendor Applications
               </CardTitle>
@@ -108,10 +108,10 @@ export default function Evaluation() {
 
         {/* Center Panel - Compliance Checklist */}
         <div className="lg:col-span-1">
-          <Card className="glass-card">
+          <Card className="card-glossy-hover">
             <CardHeader>
               <CardTitle className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 text-gradient">
                   <CheckCircle className="h-5 w-5 text-primary" />
                   Compliance Checklist
                 </div>
@@ -153,9 +153,9 @@ export default function Evaluation() {
         {/* Right Panel - Risk Heatmap & Scorecard */}
         <div className="lg:col-span-1 space-y-6">
           {/* Risk Heatmap */}
-          <Card className="glass-card">
+          <Card className="card-glossy-hover">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
+              <CardTitle className="flex items-center gap-2 text-gradient">
                 <AlertTriangle className="h-5 w-5 text-primary" />
                 Risk Assessment
               </CardTitle>
@@ -177,9 +177,9 @@ export default function Evaluation() {
           </Card>
 
           {/* Initial Scorecard */}
-          <Card className="glass-card">
+          <Card className="card-glossy-hover">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
+              <CardTitle className="flex items-center gap-2 text-gradient">
                 <Star className="h-5 w-5 text-primary" />
                 Initial Scorecard
               </CardTitle>

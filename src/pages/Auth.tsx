@@ -100,12 +100,12 @@ export default function Auth() {
           </Alert>
         )}
 
-        <Card>
+        <Card className="card-glossy-hover">
           <CardHeader>
-            <CardTitle>
+            <CardTitle className="text-gradient">
               {isInvitation ? 'Create Account' : 'Welcome Back'}
             </CardTitle>
-            <CardDescription>
+            <CardDescription className="text-muted-foreground/80">
               {isInvitation 
                 ? 'Set up your vendor portal account using the secure invitation link'
                 : 'Sign in to access your vendor portal'

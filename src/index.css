@@ -117,6 +117,84 @@
     @apply transition-all duration-200 hover:shadow-lg hover:bg-card-hover;
   }
 
+  /* Glossy Modern Card Effects */
+  .card-glossy {
+    @apply relative overflow-hidden;
+    background: linear-gradient(135deg, hsl(var(--card)) 0%, hsl(var(--card)/.95) 50%, hsl(var(--muted)/.20) 100%);
+    border: 0;
+    box-shadow: 
+      0 4px 20px -4px hsl(var(--primary)/.15),
+      0 2px 8px -2px hsl(var(--background)/.2),
+      inset 0 1px 0 hsl(var(--border)/.8);
+  }
+
+  .card-glossy::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, 
+      transparent, 
+      hsl(var(--primary)/.3), 
+      hsl(var(--primary)/.6), 
+      hsl(var(--primary)/.3), 
+      transparent
+    );
+    z-index: 1;
+  }
+
+  .card-glossy::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, 
+      hsl(var(--background)/.1) 0%, 
+      transparent 30%, 
+      transparent 70%, 
+      hsl(var(--primary)/.05) 100%
+    );
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .card-glossy-hover {
+    @apply card-glossy transition-all duration-300;
+  }
+
+  .card-glossy-hover:hover {
+    transform: translateY(-2px);
+    box-shadow: 
+      0 8px 30px -4px hsl(var(--primary)/.25),
+      0 4px 16px -2px hsl(var(--background)/.3),
+      inset 0 1px 0 hsl(var(--border)/.9);
+  }
+
+  /* Form Elements */
+  .input-glossy {
+    @apply relative backdrop-blur-sm;
+    background: linear-gradient(135deg, 
+      hsl(var(--input)) 0%, 
+      hsl(var(--input)/.95) 100%
+    );
+    border: 1px solid hsl(var(--border)/.6);
+    box-shadow: 
+      inset 0 1px 2px hsl(var(--muted)/.2),
+      0 1px 3px hsl(var(--background)/.1);
+  }
+
+  .input-glossy:focus {
+    border-color: hsl(var(--ring));
+    box-shadow: 
+      inset 0 1px 2px hsl(var(--muted)/.2),
+      0 0 0 2px hsl(var(--ring)/.3),
+      0 2px 8px hsl(var(--primary)/.15);
+  }
+
   /* Status Indicators */
   .status-success {
     @apply bg-success/10 text-success border-success/20;

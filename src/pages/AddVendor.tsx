@@ -89,13 +89,13 @@ export default function AddVendor() {
         </p>
       </div>
 
-      <Card className="max-w-2xl">
+      <Card className="max-w-2xl card-glossy-hover">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Building className="h-5 w-5" />
+          <CardTitle className="flex items-center gap-2 text-gradient">
+            <Building className="h-5 w-5 text-primary" />
             Vendor Information
           </CardTitle>
-          <CardDescription>
+          <CardDescription className="text-muted-foreground/80">
             Enter the details for the new vendor company
           </CardDescription>
         </CardHeader>

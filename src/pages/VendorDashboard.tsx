@@ -172,12 +172,12 @@ export default function VendorDashboard() {
         </div>
 
         {/* Status Card */}
-        <Card>
+        <Card className="card-glossy-hover">
           <CardHeader>
             <div className="flex items-center gap-3">
-              <StatusIcon className="h-6 w-6" />
+              <StatusIcon className="h-6 w-6 text-primary" />
               <div>
-                <CardTitle className="flex items-center gap-3">
+                <CardTitle className="flex items-center gap-3 text-gradient">
                   {vendorCompany.company_name}
                   <Badge variant={getStatusBadgeVariant(vendorCompany.status)}>
                     {vendorCompany.status.replace('_', ' ').toUpperCase()}
@@ -249,9 +249,9 @@ export default function VendorDashboard() {
 
         {/* Status-specific action cards */}
         {vendorCompany.status === 'profile_approved' && (
-          <Card>
+          <Card className="card-glossy-hover">
             <CardHeader>
-              <CardTitle className="text-green-600">✓ Profile Approved!</CardTitle>
+              <CardTitle className="text-success">✓ Profile Approved!</CardTitle>
               <CardDescription>
                 Your vendor profile has been approved. You can now proceed with the onboarding workflow.
               </CardDescription>
@@ -268,9 +268,9 @@ export default function VendorDashboard() {
         )}
 
         {vendorCompany.status === 'onboarding_in_progress' && (
-          <Card>
+          <Card className="card-glossy-hover">
             <CardHeader>
-              <CardTitle className="text-blue-600">📋 Onboarding in Progress</CardTitle>
+              <CardTitle className="text-info">📋 Onboarding in Progress</CardTitle>
               <CardDescription>
                 Complete all onboarding steps to become a fully approved vendor.
               </CardDescription>
@@ -288,9 +288,9 @@ export default function VendorDashboard() {
         )}
 
         {vendorCompany.status === 'fully_approved' && (
-          <Card>
+          <Card className="card-glossy-hover">
             <CardHeader>
-              <CardTitle className="text-green-600">🎉 Fully Approved!</CardTitle>
+              <CardTitle className="text-success">🎉 Fully Approved!</CardTitle>
               <CardDescription>
                 Congratulations! You are now a fully approved vendor in our system.
               </CardDescription>
@@ -299,9 +299,9 @@ export default function VendorDashboard() {
         )}
 
         {vendorCompany.status === 'profile_rejected' && (
-          <Card>
+          <Card className="card-glossy-hover">
             <CardHeader>
-              <CardTitle className="text-red-600">❌ Profile Rejected</CardTitle>
+              <CardTitle className="text-destructive">❌ Profile Rejected</CardTitle>
               <CardDescription>
                 Your vendor profile was rejected. Please contact support and resubmit with corrections.
               </CardDescription>

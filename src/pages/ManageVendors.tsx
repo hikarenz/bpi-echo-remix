@@ -299,9 +299,9 @@ export default function ManageVendors() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredVendors.map((vendor) => (
-          <Card key={vendor.id} className="group relative overflow-hidden bg-gradient-to-br from-card via-card to-muted/20 border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 backdrop-blur-sm">
-            {/* Glossy overlay */}
-            <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-transparent pointer-events-none" />
+          <Card key={vendor.id} className="card-glossy-hover relative">
+            {/* Enhanced glossy overlay */}
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5 pointer-events-none z-10" />
             
             <CardHeader className="relative z-10 pb-3">
               <div className="flex items-start justify-between">

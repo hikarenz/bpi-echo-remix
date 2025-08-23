@@ -643,16 +643,16 @@ export default function VendorProfileCompletion() {
         </div>
 
         {/* Form */}
-        <Card>
+        <Card className="card-glossy-hover">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              {currentStep === 1 && <Building className="h-5 w-5" />}
-              {currentStep === 2 && <FileText className="h-5 w-5" />}
-              {currentStep === 3 && <CheckCircle className="h-5 w-5" />}
-              {currentStep === 4 && <CheckCircle className="h-5 w-5" />}
+            <CardTitle className="flex items-center gap-2 text-gradient">
+              {currentStep === 1 && <Building className="h-5 w-5 text-primary" />}
+              {currentStep === 2 && <FileText className="h-5 w-5 text-primary" />}
+              {currentStep === 3 && <CheckCircle className="h-5 w-5 text-primary" />}
+              {currentStep === 4 && <CheckCircle className="h-5 w-5 text-primary" />}
               {steps[currentStep - 1]?.name}
             </CardTitle>
-            <CardDescription>
+            <CardDescription className="text-muted-foreground/80">
               {steps[currentStep - 1]?.description}
             </CardDescription>
           </CardHeader>

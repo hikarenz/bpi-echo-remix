@@ -143,10 +143,10 @@ export default function VendorOnboarding() {
         </div>
 
         {/* Progress Overview */}
-        <Card>
+        <Card className="card-glossy-hover">
           <CardHeader>
-            <CardTitle>Onboarding Progress</CardTitle>
-            <CardDescription>
+            <CardTitle className="text-gradient">Onboarding Progress</CardTitle>
+            <CardDescription className="text-muted-foreground/80">
               Your progress through the vendor onboarding process
             </CardDescription>
           </CardHeader>
@@ -179,13 +179,13 @@ export default function VendorOnboarding() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Onboarding Steps */}
-          <Card>
+          <Card className="card-glossy-hover">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
+              <CardTitle className="flex items-center gap-2 text-gradient">
                 <FileText className="h-5 w-5 text-primary" />
                 Onboarding Steps
               </CardTitle>
-              <CardDescription>
+              <CardDescription className="text-muted-foreground/80">
                 Complete each step to progress through onboarding
               </CardDescription>
             </CardHeader>
@@ -220,13 +220,13 @@ export default function VendorOnboarding() {
           </Card>
 
           {/* Compliance Documents */}
-          <Card>
+          <Card className="card-glossy-hover">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
+              <CardTitle className="flex items-center gap-2 text-gradient">
                 <Shield className="h-5 w-5 text-primary" />
                 Compliance Documents
               </CardTitle>
-              <CardDescription>
+              <CardDescription className="text-muted-foreground/80">
                 Required documents for vendor approval
               </CardDescription>
             </CardHeader>
@@ -252,7 +252,7 @@ export default function VendorOnboarding() {
         </div>
 
         {/* Bottom Action Panel */}
-        <Card>
+        <Card className="card-glossy-hover">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
