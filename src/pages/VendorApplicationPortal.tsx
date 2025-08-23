@@ -178,6 +178,12 @@ export default function VendorApplicationPortal() {
       
       const invitationToken = crypto.randomUUID();
 
+      // Get vendor company details for the email
+      const vendor = vendors.find(v => v.id === vendorId);
+      if (!vendor) {
+        throw new Error('Vendor company not found');
+      }
+
       const { data, error } = await supabase
         .from('vendor_invitations')
         .insert([{
@@ -193,11 +199,40 @@ export default function VendorApplicationPortal() {
 
       const inviteLink = `${window.location.origin}/auth?token=${invitationToken}`;
       setGeneratedLink(inviteLink);
-      
-      toast({
-        title: "Invitation Created",
-        description: "Secure invitation link generated successfully",
-      });
+
+      // Send the invitation email
+      try {
+        const emailResponse = await supabase.functions.invoke('send-invitation-email', {
+          body: {
+            recipientEmail: email,
+            companyName: vendor.company_name,
+            invitationLink: inviteLink,
+            contactPerson: vendor.contact_person
+          }
+        });
+
+        if (emailResponse.error) {
+          console.error('Email sending error:', emailResponse.error);
+          toast({
+            title: "Invitation Created",
+            description: "Invitation link generated, but email sending failed. Please copy the link manually.",
+            variant: "destructive",
+          });
+        } else {
+          console.log('Email sent successfully:', emailResponse.data);
+          toast({
+            title: "Invitation Sent",
+            description: `Invitation email sent successfully to ${email}`,
+          });
+        }
+      } catch (emailError) {
+        console.error('Email sending failed:', emailError);
+        toast({
+          title: "Invitation Created",
+          description: "Invitation link generated, but email sending failed. Please copy the link manually.",
+          variant: "destructive",
+        });
+      }
 
       fetchInvitations();
     } catch (error) {
