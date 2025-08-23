@@ -151,16 +151,23 @@ export default function Dashboard() {
         </div>
 
         {/* Recent Activity */}
-        <Card className="card-gradient">
-          <div className="p-6">
+        <Card className="relative overflow-hidden bg-gradient-to-br from-card via-card to-muted/20 border-0 shadow-lg hover:shadow-xl transition-all duration-300 backdrop-blur-sm">
+          {/* Glossy overlay */}
+          <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-transparent pointer-events-none" />
+          
+          <div className="p-6 relative z-10">
             <div className="flex items-center justify-between mb-6">
-              <h3 className="text-lg font-semibold text-card-foreground">Recent Activity</h3>
-              <Button variant="ghost" size="sm" className="text-primary hover:text-primary-hover">
+              <h3 className="text-lg font-semibold bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text">Recent Activity</h3>
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                className="text-primary hover:text-primary-hover bg-primary/10 hover:bg-primary/20 backdrop-blur-sm border border-primary/20 hover:border-primary/30 transition-all duration-200"
+              >
                 View All
               </Button>
             </div>
             
-            <div className="space-y-1">
+            <div className="space-y-3">
               {recentActivities.map((activity, index) => (
                 <RecentActivityItem
                   key={index}
