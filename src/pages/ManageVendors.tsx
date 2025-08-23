@@ -111,7 +111,6 @@ export default function ManageVendors() {
         contractEnd: vendor.contract_end_date || 'No end date',
         riskLevel: vendor.risk_level,
       }));
-
       setVendors(transformedVendors);
     } catch (error) {
       console.error('Error fetching vendors:', error);
@@ -122,6 +121,32 @@ export default function ManageVendors() {
       });
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleDeleteVendor = async (vendorId: string, vendorName: string) => {
+    try {
+      const { error } = await supabase
+        .from('vendor_companies')
+        .delete()
+        .eq('id', vendorId);
+
+      if (error) throw error;
+
+      // Remove vendor from local state
+      setVendors(vendors.filter(vendor => vendor.id !== vendorId));
+      
+      toast({
+        title: "Vendor Deleted",
+        description: `${vendorName} has been successfully deleted.`,
+      });
+    } catch (error) {
+      console.error('Error deleting vendor:', error);
+      toast({
+        title: "Error",
+        description: "Failed to delete vendor. Please try again.",
+        variant: "destructive",
+      });
     }
   };
   
@@ -219,7 +244,10 @@ export default function ManageVendors() {
                       </AlertDialogHeader>
                       <AlertDialogFooter>
                         <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+                        <AlertDialogAction 
+                          className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                          onClick={() => handleDeleteVendor(vendor.id, vendor.name)}
+                        >
                           Delete
                         </AlertDialogAction>
                       </AlertDialogFooter>
