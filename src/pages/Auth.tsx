@@ -65,7 +65,7 @@ export default function Auth() {
       setError(signUpError.message);
     } else {
       if (isInvitation) {
-        setMessage('Account created successfully! You have been linked to your vendor company.');
+        setMessage('Account created successfully! You have been linked to your vendor company and can now complete your profile.');
       } else {
         setMessage('Account created successfully! Please check your email for verification.');
       }
