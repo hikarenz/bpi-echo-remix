@@ -15,6 +15,9 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 
@@ -26,6 +29,17 @@ interface Vendor {
   location: string;
   contractEnd: string;
   riskLevel: string;
+}
+
+interface EditVendorData {
+  company_name: string;
+  category: string;
+  status: 'pending' | 'approved' | 'rejected' | 'suspended' | 'profile_pending' | 'profile_approved' | 'profile_rejected' | 'onboarding_in_progress';
+  risk_level: 'low' | 'medium' | 'high' | 'critical';
+  company_address: string;
+  contact_person: string;
+  contact_phone: string;
+  contract_end_date: string;
 }
 
 const getStatusBadgeVariant = (status: string) => {
@@ -87,6 +101,18 @@ export default function ManageVendors() {
   const [searchTerm, setSearchTerm] = useState('');
   const [vendors, setVendors] = useState<Vendor[]>([]);
   const [loading, setLoading] = useState(true);
+  const [editingVendor, setEditingVendor] = useState<Vendor | null>(null);
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [editFormData, setEditFormData] = useState<EditVendorData>({
+    company_name: '',
+    category: '',
+    status: 'pending',
+    risk_level: 'medium',
+    company_address: '',
+    contact_person: '',
+    contact_phone: '',
+    contract_end_date: '',
+  });
   const { toast } = useToast();
 
   useEffect(() => {
@@ -145,6 +171,86 @@ export default function ManageVendors() {
       toast({
         title: "Error",
         description: "Failed to delete vendor. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleEditVendor = (vendor: Vendor) => {
+    setEditingVendor(vendor);
+    // Fetch full vendor data for editing
+    fetchVendorDetails(vendor.id);
+    setEditDialogOpen(true);
+  };
+
+  const fetchVendorDetails = async (vendorId: string) => {
+    try {
+      const { data, error } = await supabase
+        .from('vendor_companies')
+        .select('*')
+        .eq('id', vendorId)
+        .single();
+
+      if (error) throw error;
+
+      setEditFormData({
+        company_name: data.company_name || '',
+        category: data.category || '',
+        status: (data.status as EditVendorData['status']) || 'pending',
+        risk_level: (data.risk_level as EditVendorData['risk_level']) || 'medium',
+        company_address: data.company_address || '',
+        contact_person: data.contact_person || '',
+        contact_phone: data.contact_phone || '',
+        contract_end_date: data.contract_end_date || '',
+      });
+    } catch (error) {
+      console.error('Error fetching vendor details:', error);
+      toast({
+        title: "Error",
+        description: "Failed to fetch vendor details.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleUpdateVendor = async () => {
+    if (!editingVendor) return;
+
+    try {
+      const { error } = await supabase
+        .from('vendor_companies')
+        .update(editFormData)
+        .eq('id', editingVendor.id);
+
+      if (error) throw error;
+
+      // Update local state
+      setVendors(vendors.map(vendor => 
+        vendor.id === editingVendor.id 
+          ? {
+              ...vendor,
+              name: editFormData.company_name,
+              category: editFormData.category,
+              status: editFormData.status,
+              location: editFormData.company_address,
+              contractEnd: editFormData.contract_end_date,
+              riskLevel: editFormData.risk_level,
+            }
+          : vendor
+      ));
+
+      setEditDialogOpen(false);
+      setEditingVendor(null);
+      
+      toast({
+        title: "Vendor Updated",
+        description: `${editFormData.company_name} has been successfully updated.`,
+      });
+    } catch (error) {
+      console.error('Error updating vendor:', error);
+      toast({
+        title: "Error",
+        description: "Failed to update vendor. Please try again.",
         variant: "destructive",
       });
     }
@@ -225,10 +331,108 @@ export default function ManageVendors() {
                   Contract ends: {vendor.contractEnd}
                 </div>
                 <div className="flex gap-2 pt-2">
-                  <Button variant="outline" size="sm" className="flex-1">
-                    <Pencil className="mr-2 h-4 w-4" />
-                    Edit
-                  </Button>
+                  <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
+                    <DialogTrigger asChild>
+                      <Button variant="outline" size="sm" className="flex-1" onClick={() => handleEditVendor(vendor)}>
+                        <Pencil className="mr-2 h-4 w-4" />
+                        Edit
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="max-w-md">
+                      <DialogHeader>
+                        <DialogTitle>Edit Vendor</DialogTitle>
+                      </DialogHeader>
+                      <div className="space-y-4">
+                        <div>
+                          <Label htmlFor="company_name">Company Name</Label>
+                          <Input
+                            id="company_name"
+                            value={editFormData.company_name}
+                            onChange={(e) => setEditFormData({...editFormData, company_name: e.target.value})}
+                          />
+                        </div>
+                        <div>
+                          <Label htmlFor="category">Category</Label>
+                          <Input
+                            id="category"
+                            value={editFormData.category}
+                            onChange={(e) => setEditFormData({...editFormData, category: e.target.value})}
+                          />
+                        </div>
+                        <div>
+                          <Label htmlFor="status">Status</Label>
+                          <Select value={editFormData.status} onValueChange={(value: EditVendorData['status']) => setEditFormData({...editFormData, status: value})}>
+                            <SelectTrigger>
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="pending">Pending</SelectItem>
+                              <SelectItem value="approved">Approved</SelectItem>
+                              <SelectItem value="profile_pending">Profile Pending</SelectItem>
+                              <SelectItem value="onboarding_in_progress">Onboarding</SelectItem>
+                              <SelectItem value="rejected">Rejected</SelectItem>
+                              <SelectItem value="suspended">Suspended</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div>
+                          <Label htmlFor="risk_level">Risk Level</Label>
+                          <Select value={editFormData.risk_level} onValueChange={(value: EditVendorData['risk_level']) => setEditFormData({...editFormData, risk_level: value})}>
+                            <SelectTrigger>
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="low">Low</SelectItem>
+                              <SelectItem value="medium">Medium</SelectItem>
+                              <SelectItem value="high">High</SelectItem>
+                              <SelectItem value="critical">Critical</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div>
+                          <Label htmlFor="company_address">Address</Label>
+                          <Input
+                            id="company_address"
+                            value={editFormData.company_address}
+                            onChange={(e) => setEditFormData({...editFormData, company_address: e.target.value})}
+                          />
+                        </div>
+                        <div>
+                          <Label htmlFor="contact_person">Contact Person</Label>
+                          <Input
+                            id="contact_person"
+                            value={editFormData.contact_person}
+                            onChange={(e) => setEditFormData({...editFormData, contact_person: e.target.value})}
+                          />
+                        </div>
+                        <div>
+                          <Label htmlFor="contact_phone">Contact Phone</Label>
+                          <Input
+                            id="contact_phone"
+                            value={editFormData.contact_phone}
+                            onChange={(e) => setEditFormData({...editFormData, contact_phone: e.target.value})}
+                          />
+                        </div>
+                        <div>
+                          <Label htmlFor="contract_end_date">Contract End Date</Label>
+                          <Input
+                            id="contract_end_date"
+                            type="date"
+                            value={editFormData.contract_end_date}
+                            onChange={(e) => setEditFormData({...editFormData, contract_end_date: e.target.value})}
+                          />
+                        </div>
+                        <div className="flex gap-2 pt-4">
+                          <Button onClick={handleUpdateVendor} className="flex-1">
+                            Update Vendor
+                          </Button>
+                          <Button variant="outline" onClick={() => setEditDialogOpen(false)} className="flex-1">
+                            Cancel
+                          </Button>
+                        </div>
+                      </div>
+                    </DialogContent>
+                  </Dialog>
                   <AlertDialog>
                     <AlertDialogTrigger asChild>
                       <Button variant="outline" size="sm" className="text-destructive hover:text-destructive">
