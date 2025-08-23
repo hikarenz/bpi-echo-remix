@@ -34,9 +34,44 @@ export function RoleBasedRouter({ children }: RoleBasedRouterProps) {
         const currentPath = window.location.pathname;
         
         if (data.role === 'vendor') {
-          // If vendor is on admin routes, redirect to vendor area
-          if (currentPath === '/' || currentPath.startsWith('/manage-vendors') || currentPath.startsWith('/echo-ai')) {
-            navigate('/vendors');
+          // Check if vendor has completed profile setup
+          const { data: vendorUser } = await supabase
+            .from('vendor_users')
+            .select('vendor_company_id')
+            .eq('user_id', user.id)
+            .single();
+          
+          if (vendorUser?.vendor_company_id) {
+            // Vendor is linked to a company, check company status
+            const { data: company } = await supabase
+              .from('vendor_companies')
+              .select('status, profile_submitted_at')
+              .eq('id', vendorUser.vendor_company_id)
+              .single();
+            
+            if (company) {
+              if (!company.profile_submitted_at) {
+                // Redirect to profile completion
+                if (currentPath !== '/vendors/profile-completion') {
+                  navigate('/vendors/profile-completion');
+                }
+              } else if (company.status === 'pending') {
+                // Redirect to onboarding
+                if (currentPath !== '/vendors/onboarding') {
+                  navigate('/vendors/onboarding');
+                }
+              } else {
+                // Redirect to vendor dashboard
+                if (currentPath === '/' || currentPath.startsWith('/manage-vendors') || currentPath.startsWith('/echo-ai')) {
+                  navigate('/vendors');
+                }
+              }
+            }
+          } else {
+            // Vendor not linked to any company - this shouldn't happen with invitations
+            if (currentPath === '/' || currentPath.startsWith('/manage-vendors') || currentPath.startsWith('/echo-ai')) {
+              navigate('/vendors');
+            }
           }
         } else if (data.role === 'bpi_admin') {
           // If admin is on vendor routes, redirect to admin dashboard

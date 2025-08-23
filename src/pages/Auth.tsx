@@ -21,8 +21,8 @@ export default function Auth() {
   const navigate = useNavigate();
   const { signIn, signUp, user } = useAuth();
 
-  const inviteToken = searchParams.get('token');
-  const isInvitation = !!inviteToken;
+  const invitationToken = searchParams.get('token');
+  const isInvitation = !!invitationToken;
 
   useEffect(() => {
     if (user) {
@@ -49,19 +49,26 @@ export default function Auth() {
     setLoading(true);
     setError(null);
 
-    const metadata = {
+    const metadata: any = {
       first_name: firstName,
       last_name: lastName,
-      role: isInvitation ? 'vendor' : 'vendor',
-      invitation_token: inviteToken
     };
+
+    if (isInvitation) {
+      metadata.role = 'vendor';
+      metadata.invitation_token = invitationToken;
+    }
 
     const { error: signUpError } = await signUp(email, password, metadata);
     
     if (signUpError) {
       setError(signUpError.message);
     } else {
-      setMessage('Please check your email to verify your account before signing in.');
+      if (isInvitation) {
+        setMessage('Account created successfully! You have been linked to your vendor company.');
+      } else {
+        setMessage('Account created successfully! Please check your email for verification.');
+      }
     }
     
     setLoading(false);

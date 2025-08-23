@@ -346,6 +346,10 @@ export type Database = {
         Args: { user_uuid: string }
         Returns: string
       }
+      process_invitation_token: {
+        Args: { p_invitation_token: string; p_user_id: string }
+        Returns: Json
+      }
     }
     Enums: {
       compliance_status:
