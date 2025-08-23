@@ -19,7 +19,6 @@ const manageVendorsNavigationItems = [
   { name: 'Dashboard', href: '/manage-vendors', icon: LayoutDashboard },
   { name: 'Vendor Application Portal', href: '/manage-vendors/application-portal', icon: FileText },
   { name: 'Add Vendor', href: '/manage-vendors/add-vendor', icon: UserPlus },
-  { name: 'Remove Vendor', href: '/manage-vendors/remove-vendor', icon: UserMinus },
   { name: 'Back', href: '/', icon: ArrowLeft },
 ];
 
