@@ -329,9 +329,8 @@ export default function ManageVendors() {
                 <div className="flex gap-2 pt-2">
                   <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
                     <DialogTrigger asChild>
-                      <Button variant="outline" size="sm" className="flex-1" onClick={() => handleEditVendor(vendor)}>
-                        <Pencil className="mr-2 h-4 w-4" />
-                        Edit
+                      <Button variant="outline" size="icon" onClick={() => handleEditVendor(vendor)}>
+                        <Pencil className="h-4 w-4" />
                       </Button>
                     </DialogTrigger>
                     <DialogContent className="max-w-md">
@@ -431,7 +430,7 @@ export default function ManageVendors() {
                   </Dialog>
                   <AlertDialog>
                     <AlertDialogTrigger asChild>
-                      <Button variant="outline" size="sm" className="text-destructive hover:text-destructive">
+                      <Button variant="outline" size="icon" className="text-destructive hover:text-destructive">
                         <Trash2 className="h-4 w-4" />
                       </Button>
                     </AlertDialogTrigger>
