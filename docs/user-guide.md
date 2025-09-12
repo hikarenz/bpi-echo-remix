@@ -12,7 +12,7 @@ This guide covers how to use the VendorPro platform for both BPI administrators 
 
 ---
 BPI Admin Demo:
-Click [here to watch the video demo](https://www.loom.com/share/923426b407744ec4852a52df820c8998?sid=ac2c32b1-577a-4d9c-aac0-5bbdcf333468).
+[Click here to watch the video demo](https://www.loom.com/embed/923426b407744ec4852a52df820c8998?sid=fa75754a-982a-4693-9d88-20dfd67ab7b7).
 
 ## Getting Started
 
