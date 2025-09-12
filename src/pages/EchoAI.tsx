@@ -94,56 +94,57 @@ export default function EchoAI() {
   const [selectedVendor, setSelectedVendor] = useState('');
   const [queryType, setQueryType] = useState('selection');
   const [isProcessing, setIsProcessing] = useState(false);
-  const [aiResponse, setAiResponse] = useState<string | null>(null);
+  const [filteredResults, setFilteredResults] = useState<any[]>([]);
 
   const handleQuery = () => {
     if (!activeQuery.trim()) return;
     
     setIsProcessing(true);
-    setAiResponse(null);
+    setFilteredResults([]);
     
     // Simulate AI processing delay
     setTimeout(() => {
-      const responses = {
-        selection: `Based on your query "${activeQuery}", EchoAI recommends:
-
-🎯 **Vendor Assessment Results:**
-• Compatibility Score: 89/100 (High alignment with strategic objectives)
-• BSP Compliance: Meets Circular 982 Sec. 5.2 requirements
-• Cost-Benefit Analysis: 15% savings vs current solution
-• Strategic Alignment: Strong fit with BPI Digital Transformation
-
-✅ **Recommendation:** Proceed with vendor engagement and due diligence phase.`,
-        
-        optimization: `EchoAI Ecosystem Analysis for "${activeQuery}":
-
-🔄 **Partnership Synergies Identified:**
-• Cost optimization potential: 22% through vendor consolidation
-• Compliance alignment: Enhanced BSP Circular 1198 adherence
-• Cross-Ayala Group leverage opportunities identified
-
-⚡ **Optimization Actions:**
-1. Consolidate overlapping services under single vendor
-2. Leverage existing Ayala Group relationships
-3. Implement shared service agreements
-
-✅ **Expected Impact:** ₱8.5M annual savings with improved service quality.`,
-        
-        compliance: `Compliance Risk Assessment for "${activeQuery}":
-
-🛡️ **BSP Regulatory Analysis:**
-• BSP Circular 982: 2 vendors require additional documentation
-• BSP Circular 1007: 1 vendor pending certification update
-• BSP Circular 1198: All vendors meet technology risk requirements
-
-⚠️ **Risk Mitigation Required:**
-• Vendor documentation gaps must be addressed within 30 days
-• Remediation plans submitted for review
-
-✅ **Compliance Status:** 85% compliant, action items identified for full compliance.`
-      };
+      let results = [];
       
-      setAiResponse(responses[queryType as keyof typeof responses]);
+      switch (queryType) {
+        case 'selection':
+          // Filter vendors based on query keywords or return all assessments
+          results = vendorAssessments.filter(vendor => 
+            vendor.name.toLowerCase().includes(activeQuery.toLowerCase()) ||
+            vendor.details.strengths.some(strength => 
+              strength.toLowerCase().includes(activeQuery.toLowerCase())
+            ) ||
+            activeQuery.toLowerCase().includes('all') ||
+            activeQuery.toLowerCase().includes('assess') ||
+            activeQuery.toLowerCase().includes('evaluate')
+          );
+          if (results.length === 0) results = vendorAssessments;
+          break;
+          
+        case 'optimization':
+          results = ecosystemInsights.filter(insight =>
+            insight.partnership.toLowerCase().includes(activeQuery.toLowerCase()) ||
+            insight.synergy.toLowerCase().includes(activeQuery.toLowerCase()) ||
+            activeQuery.toLowerCase().includes('partnership') ||
+            activeQuery.toLowerCase().includes('optimization') ||
+            activeQuery.toLowerCase().includes('synergy')
+          );
+          if (results.length === 0) results = ecosystemInsights;
+          break;
+          
+        case 'compliance':
+          results = complianceRisks.filter(risk =>
+            risk.vendor.toLowerCase().includes(activeQuery.toLowerCase()) ||
+            risk.circular.toLowerCase().includes(activeQuery.toLowerCase()) ||
+            activeQuery.toLowerCase().includes('compliance') ||
+            activeQuery.toLowerCase().includes('risk') ||
+            activeQuery.toLowerCase().includes('bsp')
+          );
+          if (results.length === 0) results = complianceRisks;
+          break;
+      }
+      
+      setFilteredResults(results);
       setIsProcessing(false);
     }, 2000);
   };
@@ -246,18 +247,101 @@ export default function EchoAI() {
             {isProcessing ? 'Analyzing...' : 'Generate AI Analysis'}
           </Button>
           
-          {/* AI Response Display */}
-          {aiResponse && (
+          {/* AI Results Display */}
+          {filteredResults.length > 0 && (
             <Card className="card-glossy mt-4">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Brain className="h-5 w-5 text-primary" />
-                  EchoAI Analysis Results
+                  EchoAI Analysis Results ({filteredResults.length} {queryType === 'selection' ? 'vendors' : queryType === 'optimization' ? 'opportunities' : 'risks'} found)
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="bg-muted/30 rounded-lg p-4 border-l-4 border-primary">
-                  <pre className="whitespace-pre-wrap text-sm font-mono">{aiResponse}</pre>
+                <div className="space-y-4">
+                  {queryType === 'selection' && filteredResults.map((vendor: any) => (
+                    <div key={vendor.id} className="p-4 bg-muted/30 rounded-lg border-l-4 border-primary">
+                      <div className="flex items-start justify-between mb-3">
+                        <div>
+                          <h4 className="font-semibold text-lg">{vendor.name}</h4>
+                          <p className="text-sm text-muted-foreground">Compatibility Score: {vendor.compatibilityScore}/100</p>
+                        </div>
+                        <Badge variant={vendor.complianceRisk === 'Low' ? 'default' : vendor.complianceRisk === 'Medium' ? 'secondary' : 'destructive'}>
+                          {vendor.complianceRisk} Risk
+                        </Badge>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
+                        <div>
+                          <span className="font-medium">Strategic Alignment:</span> {vendor.strategicAlignment}
+                        </div>
+                        <div>
+                          <span className="font-medium">Cost-Benefit:</span> {vendor.costBenefit}/100
+                        </div>
+                        <div>
+                          <span className="font-medium">BSP Reference:</span> {vendor.bspReference}
+                        </div>
+                      </div>
+                      <div className="mt-3 p-2 bg-primary/10 rounded text-sm">
+                        <span className="font-medium text-primary">Recommendation:</span> {vendor.recommendation}
+                      </div>
+                    </div>
+                  ))}
+                  
+                  {queryType === 'optimization' && filteredResults.map((insight: any, index: number) => (
+                    <div key={index} className="p-4 bg-muted/30 rounded-lg border-l-4 border-success">
+                      <div className="flex items-start justify-between mb-3">
+                        <div>
+                          <h4 className="font-semibold text-lg">{insight.partnership}</h4>
+                          <p className="text-sm text-muted-foreground">{insight.synergy}</p>
+                        </div>
+                        <Badge variant="default" className="bg-success text-success-foreground">
+                          {insight.savings} Savings
+                        </Badge>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm mb-3">
+                        <div>
+                          <span className="font-medium">Alignment:</span> {insight.alignment}
+                        </div>
+                        <div>
+                          <span className="font-medium">Cost Savings:</span> {insight.savings}
+                        </div>
+                      </div>
+                      <div className="p-2 bg-success/10 rounded text-sm">
+                        <span className="font-medium text-success">Recommendation:</span> {insight.recommendation}
+                      </div>
+                    </div>
+                  ))}
+                  
+                  {queryType === 'compliance' && filteredResults.map((risk: any, index: number) => (
+                    <div key={index} className="p-4 bg-muted/30 rounded-lg border-l-4 border-warning">
+                      <div className="flex items-start justify-between mb-3">
+                        <div>
+                          <h4 className="font-semibold text-lg">{risk.vendor}</h4>
+                          <p className="text-sm text-muted-foreground">{risk.circular}</p>
+                        </div>
+                        <Badge variant={
+                          risk.status === 'Compliant' ? 'default' :
+                          risk.status === 'In Progress' ? 'secondary' : 'destructive'
+                        }>
+                          {risk.status}
+                        </Badge>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm mb-3">
+                        <div className="flex items-center gap-2">
+                          <div className={`w-2 h-2 rounded-full ${
+                            risk.risk === 'Low' ? 'bg-success' :
+                            risk.risk === 'Medium' ? 'bg-warning' : 'bg-destructive'
+                          }`} />
+                          <span>Risk Level: {risk.risk}</span>
+                        </div>
+                        <div>
+                          <span className="font-medium">Issue:</span> {risk.issue}
+                        </div>
+                      </div>
+                      <div className="p-2 bg-warning/10 rounded text-sm">
+                        <span className="font-medium text-warning">Action Required:</span> {risk.action}
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </CardContent>
             </Card>
