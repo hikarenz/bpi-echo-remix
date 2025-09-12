@@ -93,10 +93,59 @@ export default function EchoAI() {
   const [activeQuery, setActiveQuery] = useState('');
   const [selectedVendor, setSelectedVendor] = useState('');
   const [queryType, setQueryType] = useState('selection');
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [aiResponse, setAiResponse] = useState<string | null>(null);
 
   const handleQuery = () => {
-    // Simulate AI processing - in real implementation, this would call AI service
-    console.log('Processing query:', activeQuery);
+    if (!activeQuery.trim()) return;
+    
+    setIsProcessing(true);
+    setAiResponse(null);
+    
+    // Simulate AI processing delay
+    setTimeout(() => {
+      const responses = {
+        selection: `Based on your query "${activeQuery}", EchoAI recommends:
+
+🎯 **Vendor Assessment Results:**
+• Compatibility Score: 89/100 (High alignment with strategic objectives)
+• BSP Compliance: Meets Circular 982 Sec. 5.2 requirements
+• Cost-Benefit Analysis: 15% savings vs current solution
+• Strategic Alignment: Strong fit with BPI Digital Transformation
+
+✅ **Recommendation:** Proceed with vendor engagement and due diligence phase.`,
+        
+        optimization: `EchoAI Ecosystem Analysis for "${activeQuery}":
+
+🔄 **Partnership Synergies Identified:**
+• Cost optimization potential: 22% through vendor consolidation
+• Compliance alignment: Enhanced BSP Circular 1198 adherence
+• Cross-Ayala Group leverage opportunities identified
+
+⚡ **Optimization Actions:**
+1. Consolidate overlapping services under single vendor
+2. Leverage existing Ayala Group relationships
+3. Implement shared service agreements
+
+✅ **Expected Impact:** ₱8.5M annual savings with improved service quality.`,
+        
+        compliance: `Compliance Risk Assessment for "${activeQuery}":
+
+🛡️ **BSP Regulatory Analysis:**
+• BSP Circular 982: 2 vendors require additional documentation
+• BSP Circular 1007: 1 vendor pending certification update
+• BSP Circular 1198: All vendors meet technology risk requirements
+
+⚠️ **Risk Mitigation Required:**
+• Vendor documentation gaps must be addressed within 30 days
+• Remediation plans submitted for review
+
+✅ **Compliance Status:** 85% compliant, action items identified for full compliance.`
+      };
+      
+      setAiResponse(responses[queryType as keyof typeof responses]);
+      setIsProcessing(false);
+    }, 2000);
   };
 
   return (
@@ -192,10 +241,39 @@ export default function EchoAI() {
               />
             </div>
           </div>
-          <Button onClick={handleQuery} className="w-full">
+          <Button onClick={handleQuery} className="w-full" disabled={!activeQuery.trim() || isProcessing}>
             <Brain className="mr-2 h-4 w-4" />
-            Generate AI Analysis
+            {isProcessing ? 'Analyzing...' : 'Generate AI Analysis'}
           </Button>
+          
+          {/* AI Response Display */}
+          {aiResponse && (
+            <Card className="card-glossy mt-4">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Brain className="h-5 w-5 text-primary" />
+                  EchoAI Analysis Results
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="bg-muted/30 rounded-lg p-4 border-l-4 border-primary">
+                  <pre className="whitespace-pre-wrap text-sm font-mono">{aiResponse}</pre>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+          
+          {/* Loading State */}
+          {isProcessing && (
+            <Card className="card-glossy mt-4">
+              <CardContent className="p-6">
+                <div className="flex items-center justify-center space-x-2">
+                  <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary"></div>
+                  <span className="text-muted-foreground">EchoAI is analyzing your request...</span>
+                </div>
+              </CardContent>
+            </Card>
+          )}
         </CardContent>
       </Card>
 
