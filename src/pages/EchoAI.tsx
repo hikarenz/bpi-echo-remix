@@ -40,24 +40,216 @@ const vendorAssessments = [
       risks: ['Legacy dependencies', 'Geographic limitations'],
       compliance: 'Pending certification for BSP Circular 1007 requirements'
     }
+  },
+  {
+    id: 3,
+    name: 'CyberShield Pro',
+    compatibilityScore: 95,
+    complianceRisk: 'Low',
+    strategicAlignment: 'Strong',
+    costBenefit: 91,
+    bspReference: 'BSP Circular 1198',
+    recommendation: 'Priority vendor for cybersecurity portfolio',
+    details: {
+      strengths: ['BSP-certified security framework', 'Real-time threat detection', 'Local data centers'],
+      risks: ['Premium pricing', 'Implementation complexity'],
+      compliance: 'Fully compliant with BSP Circular 1198 cybersecurity requirements'
+    }
+  },
+  {
+    id: 4,
+    name: 'CloudFirst Philippines',
+    compatibilityScore: 88,
+    complianceRisk: 'Low',
+    strategicAlignment: 'Strong',
+    costBenefit: 82,
+    bspReference: 'BSP Circular 982 Sec. 3.1',
+    recommendation: 'Recommended for cloud infrastructure',
+    details: {
+      strengths: ['Local cloud expertise', 'Government partnerships', 'Disaster recovery capabilities'],
+      risks: ['Vendor lock-in potential', 'Scalability concerns'],
+      compliance: 'Meets BSP cloud outsourcing requirements'
+    }
+  },
+  {
+    id: 5,
+    name: 'DataFlow Systems',
+    compatibilityScore: 65,
+    complianceRisk: 'High',
+    strategicAlignment: 'Weak',
+    costBenefit: 45,
+    bspReference: 'BSP Circular 982 Sec. 7.4',
+    recommendation: 'Do not proceed - compliance gaps',
+    details: {
+      strengths: ['Low cost', 'Quick implementation'],
+      risks: ['Non-compliant subcontractors', 'Data sovereignty issues', 'Poor security posture'],
+      compliance: 'Fails BSP Circular 982 subcontractor documentation requirements'
+    }
+  },
+  {
+    id: 6,
+    name: 'FinTech Innovations Corp',
+    compatibilityScore: 89,
+    complianceRisk: 'Low',
+    strategicAlignment: 'Strong',
+    costBenefit: 87,
+    bspReference: 'BSP Circular 1007',
+    recommendation: 'Excellent for digital banking transformation',
+    details: {
+      strengths: ['Digital banking expertise', 'Mobile-first solutions', 'API-driven architecture'],
+      risks: ['Rapid growth company', 'Limited enterprise clients'],
+      compliance: 'BSP Circular 1007 compliant for digital financial services'
+    }
+  },
+  {
+    id: 7,
+    name: 'Globe Business Solutions',
+    compatibilityScore: 84,
+    complianceRisk: 'Low',
+    strategicAlignment: 'Strong',
+    costBenefit: 79,
+    bspReference: 'BSP Circular 982',
+    recommendation: 'Solid choice for telecommunications services',
+    details: {
+      strengths: ['Nationwide coverage', 'Established infrastructure', 'Government contracts'],
+      risks: ['Higher costs', 'Service complexity'],
+      compliance: 'Full BSP compliance with strong audit trail'
+    }
+  },
+  {
+    id: 8,
+    name: 'AI Analytics Partners',
+    compatibilityScore: 91,
+    complianceRisk: 'Medium',
+    strategicAlignment: 'Strong',
+    costBenefit: 85,
+    bspReference: 'BSP Circular 1198',
+    recommendation: 'Consider with enhanced due diligence',
+    details: {
+      strengths: ['Advanced AI capabilities', 'Financial sector experience', 'Predictive analytics'],
+      risks: ['New technology adoption', 'Data privacy concerns'],
+      compliance: 'Partial compliance - AI governance framework needed'
+    }
+  },
+  {
+    id: 9,
+    name: 'SecureVault Pro',
+    compatibilityScore: 93,
+    complianceRisk: 'Low',
+    strategicAlignment: 'Strong',
+    costBenefit: 88,
+    bspReference: 'All BSP Circulars',
+    recommendation: 'Top choice for data security and storage',
+    details: {
+      strengths: ['Military-grade encryption', 'Zero-trust architecture', 'Compliance expertise'],
+      risks: ['Premium pricing tier', 'Complex integration'],
+      compliance: 'Exceeds all BSP security requirements'
+    }
+  },
+  {
+    id: 10,
+    name: 'PaymentGateway Solutions',
+    compatibilityScore: 87,
+    complianceRisk: 'Low',
+    strategicAlignment: 'Strong',
+    costBenefit: 83,
+    bspReference: 'BSP Circular 1007',
+    recommendation: 'Recommended for payment processing',
+    details: {
+      strengths: ['PCI DSS Level 1', 'Multi-channel support', 'Real-time settlement'],
+      risks: ['Transaction volume dependency', 'Integration timeline'],
+      compliance: 'Full BSP Circular 1007 compliance for payment services'
+    }
+  },
+  {
+    id: 11,
+    name: 'RiskAssess Analytics',
+    compatibilityScore: 86,
+    complianceRisk: 'Low',
+    strategicAlignment: 'Strong',
+    costBenefit: 81,
+    bspReference: 'BSP Circular 1198',
+    recommendation: 'Strong candidate for risk management',
+    details: {
+      strengths: ['Real-time risk scoring', 'Regulatory reporting', 'ML-based detection'],
+      risks: ['Model interpretability', 'Regulatory changes'],
+      compliance: 'BSP Circular 1198 compliant risk management framework'
+    }
+  },
+  {
+    id: 12,
+    name: 'CloudSecure International',
+    compatibilityScore: 72,
+    complianceRisk: 'Medium',
+    strategicAlignment: 'Moderate',
+    costBenefit: 65,
+    bspReference: 'BSP Circular 982',
+    recommendation: 'Consider with local partnership',
+    details: {
+      strengths: ['Global experience', 'Enterprise scale', 'Cost competitive'],
+      risks: ['Foreign entity concerns', 'Data localization issues'],
+      compliance: 'Requires local data center partnership for BSP compliance'
+    }
   }
 ];
 
 // Dummy data for ecosystem optimization
 const ecosystemInsights = [
   {
-    partnership: 'CyberSec Pro + FraudGuard AI',
-    synergy: 'Joint cybersecurity & fraud detection',
-    savings: '18%',
+    partnership: 'CyberShield Pro + RiskAssess Analytics',
+    synergy: 'Integrated cybersecurity and risk management',
+    savings: '22%',
     alignment: 'BSP Circular 1198 compliance',
-    recommendation: 'Consolidate under single vendor'
+    recommendation: 'Consolidate under unified security framework'
   },
   {
-    partnership: 'PayTech Solutions + Ayala Healthcare',
-    synergy: 'Cross-vertical payment processing',
-    savings: '12%',
-    alignment: 'Ayala Group leverage',
-    recommendation: 'Expand partnership scope'
+    partnership: 'FinTech Innovations + PaymentGateway Solutions',
+    synergy: 'End-to-end digital banking platform',
+    savings: '15%',
+    alignment: 'Digital transformation strategy',
+    recommendation: 'Create integrated payment ecosystem'
+  },
+  {
+    partnership: 'CloudFirst Philippines + SecureVault Pro',
+    synergy: 'Secure cloud infrastructure with data protection',
+    savings: '28%',
+    alignment: 'Data sovereignty and security',
+    recommendation: 'Build comprehensive cloud security platform'
+  },
+  {
+    partnership: 'Globe Business + AI Analytics Partners',
+    synergy: 'Network intelligence and predictive analytics',
+    savings: '19%',
+    alignment: 'Infrastructure optimization',
+    recommendation: 'Leverage network data for business insights'
+  },
+  {
+    partnership: 'TechCorp Solutions + CyberShield Pro',
+    synergy: 'Digital transformation with security-first approach',
+    savings: '17%',
+    alignment: 'Comprehensive modernization',
+    recommendation: 'Joint implementation with security oversight'
+  },
+  {
+    partnership: 'Ayala Group Vendors + BPI Technology Stack',
+    synergy: 'Cross-company vendor standardization',
+    savings: '35%',
+    alignment: 'Group-wide efficiency',
+    recommendation: 'Implement group procurement strategy'
+  },
+  {
+    partnership: 'PaymentGateway + RiskAssess Analytics',
+    synergy: 'Real-time payment fraud detection',
+    savings: '24%',
+    alignment: 'Enhanced payment security',
+    recommendation: 'Integrate fraud scoring with payment processing'
+  },
+  {
+    partnership: 'AI Analytics + SecureVault Pro',
+    synergy: 'Secure AI model deployment and data analysis',
+    savings: '16%',
+    alignment: 'AI governance and data protection',
+    recommendation: 'Create secure AI development environment'
   }
 ];
 
@@ -72,20 +264,116 @@ const complianceRisks = [
     action: 'Exclude until compliance gaps closed'
   },
   {
-    vendor: 'CloudFirst Tech',
+    vendor: 'CloudSecure International',
+    risk: 'High',
+    circular: 'BSP Circular 982 Sec. 4.1',
+    issue: 'Data processing outside Philippines without proper safeguards',
+    status: 'Non-compliant',
+    action: 'Require local data center partnership or exclude'
+  },
+  {
+    vendor: 'AI Analytics Partners',
+    risk: 'Medium',
+    circular: 'BSP Circular 1198',
+    issue: 'AI model governance framework incomplete',
+    status: 'In Progress',
+    action: 'Complete AI governance documentation before approval'
+  },
+  {
+    vendor: 'Legacy Systems Inc',
     risk: 'Medium',
     circular: 'BSP Circular 1007',
-    issue: 'Partial compliance, remediation in progress',
+    issue: 'Outdated security controls, partial compliance',
     status: 'In Progress',
-    action: 'Require updated remediation plan'
+    action: 'Require security modernization plan and timeline'
+  },
+  {
+    vendor: 'CloudFirst Philippines',
+    risk: 'Low',
+    circular: 'BSP Circular 982',
+    issue: 'Minor documentation gaps in disaster recovery plans',
+    status: 'Minor Issues',
+    action: 'Complete DR documentation within 30 days'
   },
   {
     vendor: 'SecureVault Pro',
     risk: 'Low',
     circular: 'All BSP Circulars',
-    issue: 'Fully compliant',
+    issue: 'Fully compliant with all requirements',
     status: 'Compliant',
     action: 'Prioritize for selection'
+  },
+  {
+    vendor: 'CyberShield Pro',
+    risk: 'Low',
+    circular: 'BSP Circular 1198',
+    issue: 'Exceeds cybersecurity requirements',
+    status: 'Compliant',
+    action: 'Approved for immediate procurement'
+  },
+  {
+    vendor: 'FinTech Innovations Corp',
+    risk: 'Low',
+    circular: 'BSP Circular 1007',
+    issue: 'All digital banking compliance requirements met',
+    status: 'Compliant',
+    action: 'Recommended for digital transformation projects'
+  },
+  {
+    vendor: 'PaymentGateway Solutions',
+    risk: 'Low',
+    circular: 'BSP Circular 1007',
+    issue: 'PCI DSS Level 1 certified, BSP compliant',
+    status: 'Compliant',
+    action: 'Approved for payment processing services'
+  },
+  {
+    vendor: 'Globe Business Solutions',
+    risk: 'Low',
+    circular: 'BSP Circular 982',
+    issue: 'Full compliance with telecommunications outsourcing',
+    status: 'Compliant',
+    action: 'Continue existing partnership'
+  },
+  {
+    vendor: 'TechCorp Solutions',
+    risk: 'Low',
+    circular: 'BSP Circular 982 Sec. 5.2',
+    issue: 'IT outsourcing requirements fully satisfied',
+    status: 'Compliant',
+    action: 'Recommended for pilot implementation'
+  },
+  {
+    vendor: 'RiskAssess Analytics',
+    risk: 'Low',
+    circular: 'BSP Circular 1198',
+    issue: 'Risk management framework BSP certified',
+    status: 'Compliant',
+    action: 'Approved for risk management services'
+  },
+  {
+    vendor: 'QuickFix Solutions',
+    risk: 'High',
+    circular: 'BSP Circular 982',
+    issue: 'No BSP registration, unlicensed operations',
+    status: 'Non-compliant',
+    action: 'Immediate exclusion from vendor pool'
+  },
+  {
+    vendor: 'BudgetTech Systems',
+    risk: 'Medium',
+    circular: 'BSP Circular 1198',
+    issue: 'Insufficient cybersecurity controls',
+    status: 'In Progress',
+    action: 'Security audit required before approval'
+  },
+  {
+    vendor: 'OffshoreCloud Services',
+    risk: 'High',
+    circular: 'BSP Circular 982 Sec. 3.2',
+    issue: 'No local presence, data sovereignty concerns',
+    status: 'Non-compliant',
+    action: 'Require local entity establishment'
   }
 ];
 
@@ -169,7 +457,7 @@ export default function EchoAI() {
             <div className="flex items-center gap-3">
               <Target className="h-8 w-8 text-primary" />
               <div>
-                <p className="text-2xl font-bold">24</p>
+                <p className="text-2xl font-bold">{vendorAssessments.length}</p>
                 <p className="text-sm text-muted-foreground">Vendor Assessments</p>
               </div>
             </div>
@@ -180,7 +468,7 @@ export default function EchoAI() {
             <div className="flex items-center gap-3">
               <Shield className="h-8 w-8 text-success" />
               <div>
-                <p className="text-2xl font-bold">87%</p>
+                <p className="text-2xl font-bold">{Math.round((complianceRisks.filter(r => r.status === 'Compliant').length / complianceRisks.length) * 100)}%</p>
                 <p className="text-sm text-muted-foreground">Compliance Rate</p>
               </div>
             </div>
@@ -191,7 +479,7 @@ export default function EchoAI() {
             <div className="flex items-center gap-3">
               <TrendingUp className="h-8 w-8 text-warning" />
               <div>
-                <p className="text-2xl font-bold">₱15M</p>
+                <p className="text-2xl font-bold">₱{ecosystemInsights.reduce((sum, insight) => sum + parseInt(insight.savings.replace('%', '')), 0) * 2.5}M</p>
                 <p className="text-sm text-muted-foreground">Optimization Savings</p>
               </div>
             </div>
@@ -202,8 +490,8 @@ export default function EchoAI() {
             <div className="flex items-center gap-3">
               <AlertCircle className="h-8 w-8 text-destructive" />
               <div>
-                <p className="text-2xl font-bold">3</p>
-                <p className="text-sm text-muted-foreground">Risk Alerts</p>
+                <p className="text-2xl font-bold">{complianceRisks.filter(r => r.risk === 'High').length}</p>
+                <p className="text-sm text-muted-foreground">High Risk Alerts</p>
               </div>
             </div>
           </CardContent>
