@@ -5,8 +5,10 @@ This guide covers how to use the VendorPro platform for both BPI administrators 
 ## Table of Contents
 - [Getting Started](#getting-started)
 - [BPI Admin Guide](#bpi-admin-guide)
+- [How to Use Echo AI Advisor](#how-to-use-echo-ai-advisor)
 - [Vendor Guide](#vendor-guide)
 - [Common Features](#common-features)
+- [Advanced Features](#advanced-features)
 
 ---
 
@@ -77,6 +79,106 @@ Access the main dashboard to view:
 2. **Profile Approval**: Approve vendor profiles
 3. **Onboarding Support**: Guide vendors through onboarding
 4. **Final Approval**: Grant full vendor access
+
+---
+
+## How to Use Echo AI Advisor
+
+The Echo AI Advisor is an intelligent analysis tool that helps you make informed decisions about vendor management. Access it from the admin dashboard sidebar.
+
+### Interface Overview
+
+The interface has three main analysis types you can select from the dropdown:
+
+#### 1. Vendor Selection
+Use this for evaluating and comparing vendors for specific projects or requirements.
+
+**Sample prompts:**
+- "Evaluate TechCorp Solutions vs Legacy Systems Inc for our digital banking transformation project"
+- "I need vendor recommendations for cloud infrastructure that comply with BSP Circular 982"
+- "Compare cybersecurity vendors with existing Ayala Group partnerships"
+- "Find the best vendors for mobile banking app development with strong security credentials"
+- "Recommend fintech vendors for payment processing integration"
+
+#### 2. Ecosystem Optimization
+Use this to optimize your current vendor portfolio and identify synergies or inefficiencies.
+
+**Sample prompts:**
+- "Identify partnership synergies between our current cybersecurity and fraud detection vendors"
+- "Find cost optimization opportunities across BPI and Ayala Healthcare vendor networks"
+- "Analyze vendor consolidation opportunities to reduce redundancy"
+- "Review our vendor ecosystem for gaps in digital transformation capabilities"
+- "Suggest ways to improve vendor performance across our IT services portfolio"
+
+#### 3. Compliance Assessment
+Use this to ensure vendors meet regulatory requirements and compliance standards.
+
+**Sample prompts:**
+- "Check our shortlisted vendors against BSP Circular 1198 requirements"
+- "Review compliance risks for vendors handling sensitive financial data"
+- "Audit vendor subcontractor arrangements per BSP Circular 982 Section 7.4"
+- "Assess GDPR compliance for our European vendors"
+- "Evaluate cybersecurity compliance for cloud service providers"
+
+### Quick Start Guide
+
+1. **Select Analysis Type**: Choose from the dropdown menu (Vendor Selection, Ecosystem Optimization, or Compliance Assessment)
+2. **Enter Your Query**: Type your specific question or request in the textarea
+3. **Generate Analysis**: Click "Generate AI Analysis" to get detailed recommendations
+4. **Review Results**: The AI will provide:
+   - Detailed analysis summary
+   - Specific vendor recommendations
+   - Risk assessments
+   - Actionable next steps
+
+### Best Practices for AI Queries
+
+#### Be Specific
+- Include specific requirements, budgets, or timelines
+- Mention relevant regulations or compliance standards
+- Specify the scope (department, project, or company-wide)
+
+#### Provide Context
+- Reference existing vendors or partnerships
+- Mention any constraints or preferences
+- Include performance criteria or success metrics
+
+#### Sample Advanced Queries
+- "For our core banking system upgrade, analyze vendors that offer both software and implementation services, with proven experience in Philippine banking regulations"
+- "Optimize our current vendor spend across IT infrastructure, considering consolidation opportunities while maintaining service levels"
+- "Comprehensive compliance review of all vendors handling customer data, focusing on BSP data privacy requirements and international transfer protocols"
+
+### Understanding AI Responses
+
+The AI Advisor provides structured responses including:
+
+#### Analysis Summary
+- High-level overview of findings
+- Key insights and recommendations
+- Risk level assessment
+
+#### Vendor Recommendations
+- Ranked list of suitable vendors
+- Strengths and weaknesses for each
+- Fit scores based on your requirements
+
+#### Risk Assessment
+- Compliance risks identified
+- Performance risks
+- Mitigation strategies
+
+#### Next Steps
+- Immediate actions to take
+- Timeline recommendations
+- Follow-up evaluation suggestions
+
+### Tips for Better Results
+
+1. **Use Industry Terms**: Include relevant banking, fintech, or regulatory terminology
+2. **Specify Timeframes**: Mention project timelines or urgency levels
+3. **Include Budget Context**: Reference budget ranges when relevant
+4. **Ask Follow-up Questions**: Refine your analysis with additional queries
+5. **Cross-reference Results**: Compare AI recommendations with your existing vendor knowledge
 
 ---
 
@@ -242,6 +344,41 @@ Understanding your vendor status:
 - **Email Support**: support@vendorpro.com
 - **Phone Support**: Available during business hours
 - **Live Chat**: In-app support during business hours
+- **AI Advisor Help**: Use the help icon in Echo AI for guidance on query formulation
+
+---
+
+## Advanced Features
+
+### Bulk Vendor Operations
+- **Mass Status Updates**: Change multiple vendor statuses simultaneously
+- **Bulk Document Requests**: Request documents from multiple vendors
+- **Group Communications**: Send messages to vendor groups
+- **Batch Evaluations**: Process multiple evaluations efficiently
+
+### Analytics and Reporting
+- **Performance Dashboards**: Real-time vendor performance metrics
+- **Custom Reports**: Generate tailored reports for specific needs
+- **Trend Analysis**: Historical performance and compliance trends
+- **Predictive Insights**: AI-powered forecasting and risk prediction
+
+### Integration Capabilities
+- **API Access**: Programmatic access to vendor data
+- **Third-party Integrations**: Connect with existing business systems
+- **Data Export**: Export vendor data in various formats
+- **Webhook Notifications**: Real-time notifications to external systems
+
+### Advanced Compliance Features
+- **Automated Compliance Monitoring**: Continuous compliance status tracking
+- **Risk Scoring**: Dynamic risk assessment based on multiple factors
+- **Regulatory Updates**: Automatic updates for changing compliance requirements
+- **Audit Trail**: Complete audit history for all vendor interactions
+
+### Mobile Accessibility
+- **Responsive Design**: Full functionality on mobile devices
+- **Touch-optimized Interface**: Mobile-friendly navigation and controls
+- **Offline Capabilities**: Basic functionality when offline
+- **Push Notifications**: Mobile alerts for critical updates
 
 ---
 
