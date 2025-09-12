@@ -119,6 +119,9 @@ Use this to optimize your current vendor portfolio and identify synergies or ine
 #### 3. Compliance Assessment
 Use this to ensure vendors meet regulatory requirements and compliance standards.
 
+![EchoAI Compliance Assessment Results](/lovable-uploads/2dcd1220-29cd-41c2-a658-c285331b8b51.png)
+*EchoAI Advisor showing compliance assessment results with risk levels, BSP circular references, and required actions*
+
 **Sample prompts:**
 - "Check our shortlisted vendors against BSP Circular 1198 requirements"
 - "Review compliance risks for vendors handling sensitive financial data"
