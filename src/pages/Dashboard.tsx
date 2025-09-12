@@ -15,6 +15,7 @@ import {
   XCircle,
   Star
 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { StatCard } from '@/components/dashboard/StatCard';
 import { TrendChart } from '@/components/dashboard/TrendChart';
 import { RecentActivityItem } from '@/components/dashboard/RecentActivityItem';
@@ -222,6 +223,8 @@ const aiRecommendations = [
 ];
 
 export default function Dashboard() {
+  const navigate = useNavigate();
+  
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -491,7 +494,12 @@ export default function Dashboard() {
                     <Progress value={rec.confidence} className="h-1 w-20" />
                     <span className="text-xs text-muted-foreground">{rec.confidence}% confidence</span>
                   </div>
-                  <Button size="sm" variant="outline" className="text-xs">
+                  <Button 
+                    size="sm" 
+                    variant="outline" 
+                    className="text-xs"
+                    onClick={() => navigate(`/recommendations/${index}`)}
+                  >
                     View Details
                   </Button>
                 </div>

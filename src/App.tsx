@@ -23,6 +23,7 @@ import ManageVendors from "./pages/ManageVendors";
 import VendorApplicationPortal from "./pages/VendorApplicationPortal";
 import AddVendor from "./pages/AddVendor";
 import RemoveVendor from "./pages/RemoveVendor";
+import RecommendationDetails from "./pages/RecommendationDetails";
 
 const queryClient = new QueryClient();
 
@@ -38,6 +39,7 @@ const App = () => (
               <Route path="/auth" element={<Auth />} />
               <Route path="/" element={<AuthGuard><DashboardLayout /></AuthGuard>}>
                 <Route index element={<Dashboard />} />
+                <Route path="recommendations/:id" element={<RecommendationDetails />} />
                 <Route path="evaluation" element={<Evaluation />} />
                 <Route path="onboarding" element={<Onboarding />} />
                 <Route path="active-management" element={<div className="p-8 text-center text-muted-foreground">Active Management page coming soon...</div>} />
