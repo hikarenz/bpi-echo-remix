@@ -18,6 +18,9 @@ This guide covers how to use the VendorPro platform for both BPI administrators 
 - **BPI Admins**: Receive login credentials from system administrator
 - **Vendors**: Receive invitation email with signup link
 
+![VendorPro Login Page](./images/login-page.png)
+*VendorPro authentication page with secure login for both administrators and vendors*
+
 ### First Login
 1. Navigate to the authentication page
 2. Enter your email and password
@@ -37,6 +40,9 @@ Access the main dashboard to view:
 - **Active Contracts**: Currently active vendor relationships
 - **Monthly Growth**: Vendor acquisition trends
 
+![VendorPro Admin Dashboard](./images/dashboard-overview.png)
+*Main admin dashboard showing key metrics, recent activity, and vendor statistics*
+
 ### Managing Vendors
 
 #### Viewing All Vendors
@@ -46,6 +52,9 @@ Access the main dashboard to view:
    - **Active**: Approved vendors with active contracts
    - **Rejected**: Applications that were declined
    - **Expired**: Vendors with expired contracts
+
+![VendorPro Manage Vendors](./images/manage-vendors.png)
+*Manage Vendors page showing vendor list organized by status with filtering and search capabilities*
 
 #### Adding New Vendors
 1. Click "Add Vendor" from the Manage Vendors page
@@ -85,6 +94,9 @@ Access the main dashboard to view:
 ## How to Use Echo AI Advisor
 
 The Echo AI Advisor is an intelligent analysis tool that helps you make informed decisions about vendor management. Access it from the admin dashboard sidebar.
+
+![Echo AI Advisor Interface](./images/echo-ai-advisor.png)
+*Echo AI Advisor showing analysis types, query interface, and AI-generated vendor recommendations*
 
 ### Interface Overview
 
@@ -197,6 +209,9 @@ Vendors use the platform to apply for vendor status, complete onboarding, and ma
    - Secure password
 4. Complete initial profile setup
 
+![Vendor Application Form](./images/vendor-application.png)
+*Vendor application form showing profile completion with company information, financial details, and document upload*
+
 #### Profile Completion
 After registration, complete your vendor profile:
 
@@ -255,6 +270,9 @@ Your vendor dashboard shows:
 - **Required Actions**: Tasks that need completion
 - **Important Dates**: Contract dates and renewals
 - **Quick Links**: Access to key functions
+
+![Vendor Dashboard](./images/vendor-dashboard.png)
+*Vendor dashboard interface showing application status, required actions, and profile management options*
 
 #### Profile Updates
 - Update company information as needed
