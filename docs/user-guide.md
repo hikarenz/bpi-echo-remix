@@ -93,9 +93,6 @@ The interface has three main analysis types you can select from the dropdown:
 #### 1. Vendor Selection
 Use this for evaluating and comparing vendors for specific projects or requirements.
 
-![EchoAI Vendor Selection Results](/lovable-uploads/a117dc17-42d0-4f7c-b824-157dd6d27287.png)
-*EchoAI Advisor showing vendor selection analysis with compatibility scores, strategic alignment, and BSP compliance references*
-
 **Sample prompts:**
 - "Evaluate TechCorp Solutions vs Legacy Systems Inc for our digital banking transformation project"
 - "I need vendor recommendations for cloud infrastructure that comply with BSP Circular 982"
@@ -106,9 +103,6 @@ Use this for evaluating and comparing vendors for specific projects or requireme
 #### 2. Ecosystem Optimization
 Use this to optimize your current vendor portfolio and identify synergies or inefficiencies.
 
-![EchoAI Ecosystem Optimization Results](/lovable-uploads/eb537f64-7cae-47e6-b19e-ff5f4895d141.png)
-*EchoAI Advisor showing ecosystem optimization opportunities with partnership synergies and cost savings analysis*
-
 **Sample prompts:**
 - "Identify partnership synergies between our current cybersecurity and fraud detection vendors"
 - "Find cost optimization opportunities across BPI and Ayala Healthcare vendor networks"
@@ -118,9 +112,6 @@ Use this to optimize your current vendor portfolio and identify synergies or ine
 
 #### 3. Compliance Assessment
 Use this to ensure vendors meet regulatory requirements and compliance standards.
-
-![EchoAI Compliance Assessment Results](/lovable-uploads/2dcd1220-29cd-41c2-a658-c285331b8b51.png)
-*EchoAI Advisor showing compliance assessment results with risk levels, BSP circular references, and required actions*
 
 **Sample prompts:**
 - "Check our shortlisted vendors against BSP Circular 1198 requirements"
