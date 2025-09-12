@@ -93,6 +93,9 @@ The interface has three main analysis types you can select from the dropdown:
 #### 1. Vendor Selection
 Use this for evaluating and comparing vendors for specific projects or requirements.
 
+![EchoAI Vendor Selection Results](/lovable-uploads/a117dc17-42d0-4f7c-b824-157dd6d27287.png)
+*EchoAI Advisor showing vendor selection analysis with compatibility scores, strategic alignment, and BSP compliance references*
+
 **Sample prompts:**
 - "Evaluate TechCorp Solutions vs Legacy Systems Inc for our digital banking transformation project"
 - "I need vendor recommendations for cloud infrastructure that comply with BSP Circular 982"
