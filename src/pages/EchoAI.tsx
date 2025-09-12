@@ -193,21 +193,14 @@ const vendorAssessments = [
   }
 ];
 
-// Dummy data for ecosystem optimization
+// Dummy data for ecosystem optimization (sorted by cost savings descending)
 const ecosystemInsights = [
   {
-    partnership: 'CyberShield Pro + RiskAssess Analytics',
-    synergy: 'Integrated cybersecurity and risk management',
-    savings: '22%',
-    alignment: 'BSP Circular 1198 compliance',
-    recommendation: 'Consolidate under unified security framework'
-  },
-  {
-    partnership: 'FinTech Innovations + PaymentGateway Solutions',
-    synergy: 'End-to-end digital banking platform',
-    savings: '15%',
-    alignment: 'Digital transformation strategy',
-    recommendation: 'Create integrated payment ecosystem'
+    partnership: 'Ayala Group Vendors + BPI Technology Stack',
+    synergy: 'Cross-company vendor standardization',
+    savings: '35%',
+    alignment: 'Group-wide efficiency',
+    recommendation: 'Implement group procurement strategy'
   },
   {
     partnership: 'CloudFirst Philippines + SecureVault Pro',
@@ -215,6 +208,20 @@ const ecosystemInsights = [
     savings: '28%',
     alignment: 'Data sovereignty and security',
     recommendation: 'Build comprehensive cloud security platform'
+  },
+  {
+    partnership: 'PaymentGateway + RiskAssess Analytics',
+    synergy: 'Real-time payment fraud detection',
+    savings: '24%',
+    alignment: 'Enhanced payment security',
+    recommendation: 'Integrate fraud scoring with payment processing'
+  },
+  {
+    partnership: 'CyberShield Pro + RiskAssess Analytics',
+    synergy: 'Integrated cybersecurity and risk management',
+    savings: '22%',
+    alignment: 'BSP Circular 1198 compliance',
+    recommendation: 'Consolidate under unified security framework'
   },
   {
     partnership: 'Globe Business + AI Analytics Partners',
@@ -231,25 +238,18 @@ const ecosystemInsights = [
     recommendation: 'Joint implementation with security oversight'
   },
   {
-    partnership: 'Ayala Group Vendors + BPI Technology Stack',
-    synergy: 'Cross-company vendor standardization',
-    savings: '35%',
-    alignment: 'Group-wide efficiency',
-    recommendation: 'Implement group procurement strategy'
-  },
-  {
-    partnership: 'PaymentGateway + RiskAssess Analytics',
-    synergy: 'Real-time payment fraud detection',
-    savings: '24%',
-    alignment: 'Enhanced payment security',
-    recommendation: 'Integrate fraud scoring with payment processing'
-  },
-  {
     partnership: 'AI Analytics + SecureVault Pro',
     synergy: 'Secure AI model deployment and data analysis',
     savings: '16%',
     alignment: 'AI governance and data protection',
     recommendation: 'Create secure AI development environment'
+  },
+  {
+    partnership: 'FinTech Innovations + PaymentGateway Solutions',
+    synergy: 'End-to-end digital banking platform',
+    savings: '15%',
+    alignment: 'Digital transformation strategy',
+    recommendation: 'Create integrated payment ecosystem'
   }
 ];
 
