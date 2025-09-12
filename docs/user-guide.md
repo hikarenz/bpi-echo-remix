@@ -106,6 +106,9 @@ Use this for evaluating and comparing vendors for specific projects or requireme
 #### 2. Ecosystem Optimization
 Use this to optimize your current vendor portfolio and identify synergies or inefficiencies.
 
+![EchoAI Ecosystem Optimization Results](/lovable-uploads/eb537f64-7cae-47e6-b19e-ff5f4895d141.png)
+*EchoAI Advisor showing ecosystem optimization opportunities with partnership synergies and cost savings analysis*
+
 **Sample prompts:**
 - "Identify partnership synergies between our current cybersecurity and fraud detection vendors"
 - "Find cost optimization opportunities across BPI and Ayala Healthcare vendor networks"
