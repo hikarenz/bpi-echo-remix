@@ -114,6 +114,26 @@ export default function VendorOnboarding() {
     steps.reduce((acc, step) => acc + step.progress, 0) / steps.length
   );
 
+  const handleStepClick = (stepId: number) => {
+    // Handle different step actions
+    switch (stepId) {
+      case 1:
+        // Compliance Documents Upload - scroll to documents section
+        document.getElementById('compliance-documents')?.scrollIntoView({ behavior: 'smooth' });
+        break;
+      case 2:
+        // Payment Setup
+        alert('Payment setup will be configured after document approval. Please complete document upload first.');
+        break;
+      case 3:
+        // Security Assessment
+        alert('Security assessment will be conducted by our team after initial approval.');
+        break;
+      default:
+        console.log('Step clicked:', stepId);
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -210,7 +230,12 @@ export default function VendorOnboarding() {
                         <span className="text-xs text-muted-foreground w-10">{step.progress}%</span>
                       </div>
                     </div>
-                    <Button size="sm" variant="outline" disabled={step.status === "completed"}>
+                    <Button 
+                      size="sm" 
+                      variant="outline" 
+                      disabled={step.status === "completed"}
+                      onClick={() => handleStepClick(step.id)}
+                    >
                       {step.status === "completed" ? "Complete" : "Start"}
                     </Button>
                   </div>
@@ -220,7 +245,7 @@ export default function VendorOnboarding() {
           </Card>
 
           {/* Compliance Documents */}
-          <Card className="card-glossy-hover">
+          <Card className="card-glossy-hover" id="compliance-documents">
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-gradient">
                 <Shield className="h-5 w-5 text-primary" />

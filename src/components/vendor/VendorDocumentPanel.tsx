@@ -42,7 +42,7 @@ export function VendorDocumentPanel({ vendorCompanyId }: VendorDocumentPanelProp
           .from('compliance_documents')
           .select('*')
           .eq('vendor_company_id', vendorCompanyId)
-          .order('uploaded_at', { ascending: false });
+          .order('submitted_at', { ascending: false });
 
         if (error) throw error;
         setDocuments(data || []);
