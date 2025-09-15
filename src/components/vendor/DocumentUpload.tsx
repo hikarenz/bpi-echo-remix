@@ -1,10 +1,11 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Upload, X, FileText, AlertCircle, CheckCircle } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { setupStorageBucket } from '@/utils/storageSetup';
 
 interface DocumentUploadProps {
   documentName: string;
@@ -26,7 +27,42 @@ export function DocumentUpload({
   const [uploadProgress, setUploadProgress] = useState(0);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [storageReady, setStorageReady] = useState<boolean | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Check storage setup on component mount
+  useEffect(() => {
+    const checkStorage = async () => {
+      try {
+        const { data: buckets, error } = await supabase.storage.listBuckets();
+        if (error) {
+          setStorageReady(false);
+          setError(`Storage not accessible: ${error.message}`);
+          return;
+        }
+        
+        const documentsBucket = buckets?.find(bucket => bucket.name === 'documents');
+        if (!documentsBucket) {
+          // Try to setup the bucket
+          const setupResult = await setupStorageBucket();
+          if (setupResult.success) {
+            setStorageReady(true);
+            toast.success('Storage setup completed successfully');
+          } else {
+            setStorageReady(false);
+            setError(`Storage setup failed: ${setupResult.error}`);
+          }
+        } else {
+          setStorageReady(true);
+        }
+      } catch (error: any) {
+        setStorageReady(false);
+        setError(`Storage check failed: ${error.message}`);
+      }
+    };
+
+    checkStorage();
+  }, []);
 
   const validateFile = (file: File): string | null => {
     const maxSizeInBytes = maxSizeInMB * 1024 * 1024;
@@ -84,7 +120,12 @@ export function DocumentUpload({
   };
 
   const uploadFile = async () => {
-    if (!selectedFile) return;
+    if (!selectedFile || !storageReady) {
+      if (!storageReady) {
+        setError('Storage is not ready. Please try again or contact support.');
+      }
+      return;
+    }
 
     setIsUploading(true);
     setUploadProgress(0);
@@ -103,7 +144,12 @@ export function DocumentUpload({
           upsert: false
         });
 
-      if (uploadError) throw uploadError;
+      if (uploadError) {
+        if (uploadError.message?.includes('Bucket not found')) {
+          throw new Error('Storage bucket not configured. Please contact support.');
+        }
+        throw uploadError;
+      }
 
       // Update database
       const { error: dbError } = await supabase
@@ -151,15 +197,28 @@ export function DocumentUpload({
   return (
     <Card className="w-full">
       <CardContent className="p-6">
-        <div className="space-y-4">
-          <div className="text-center">
-            <h3 className="font-semibold text-lg mb-2">Upload {documentName}</h3>
-            <p className="text-sm text-muted-foreground mb-4">
-              Accepted formats: {acceptedFileTypes} (Max: {maxSizeInMB}MB)
-            </p>
-          </div>
+          <div className="space-y-4">
+            <div className="text-center">
+              <h3 className="font-semibold text-lg mb-2">Upload {documentName}</h3>
+              <p className="text-sm text-muted-foreground mb-4">
+                Accepted formats: {acceptedFileTypes} (Max: {maxSizeInMB}MB)
+              </p>
+              
+              {storageReady === false && (
+                <div className="mb-4 p-3 bg-destructive/10 text-destructive rounded-lg">
+                  <AlertCircle className="h-4 w-4 mx-auto mb-2" />
+                  <p className="text-sm">Storage is not ready. Please contact support for setup.</p>
+                </div>
+              )}
+              
+              {storageReady === null && (
+                <div className="mb-4 p-3 bg-muted rounded-lg">
+                  <p className="text-sm">Checking storage setup...</p>
+                </div>
+              )}
+            </div>
 
-          {!selectedFile && (
+          {!selectedFile && storageReady && (
             <div
               className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors ${
                 isDragging 
@@ -180,7 +239,7 @@ export function DocumentUpload({
               <Button 
                 variant="outline" 
                 onClick={() => fileInputRef.current?.click()}
-                disabled={isUploading}
+                disabled={isUploading || !storageReady}
               >
                 Browse Files
               </Button>
@@ -230,7 +289,7 @@ export function DocumentUpload({
                 <Button 
                   onClick={uploadFile} 
                   className="w-full"
-                  disabled={isUploading}
+                  disabled={isUploading || !storageReady}
                 >
                   <Upload className="h-4 w-4 mr-2" />
                   Upload Document
