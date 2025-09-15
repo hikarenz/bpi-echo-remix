@@ -51,7 +51,7 @@ auth.uid() IS NOT NULL AND (
   OR
   EXISTS (
     SELECT 1 FROM profiles 
-    WHERE id = auth.uid() AND role = 'admin'
+    WHERE id = auth.uid() AND role = 'bpi_admin'
   )
 )
 ```

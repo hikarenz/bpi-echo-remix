@@ -51,7 +51,7 @@ VALUES (
     -- Admins can see all documents
     EXISTS (
       SELECT 1 FROM profiles 
-      WHERE id = auth.uid() AND role = ''admin''
+      WHERE id = auth.uid() AND role = ''bpi_admin''
     )
   )',
   NULL,
