@@ -87,12 +87,50 @@ export function TopNavigation({ onSidebarToggle }: TopNavigationProps) {
       <div className="flex-1"></div>
 
       <div className="flex items-center gap-3">
-        <Button variant="ghost" size="sm" className="relative">
-          <Bell className="h-5 w-5" />
-          <Badge className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center text-xs bg-destructive">
-            3
-          </Badge>
-        </Button>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="sm" className="relative">
+              <Bell className="h-5 w-5" />
+              <Badge className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center text-xs bg-destructive">
+                3
+              </Badge>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-80 bg-background border border-border/50 shadow-xl backdrop-blur-xl z-50">
+            <DropdownMenuLabel className="font-semibold">Notifications</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <div className="max-h-96 overflow-y-auto">
+              <DropdownMenuItem className="flex flex-col items-start p-4 hover:bg-secondary cursor-pointer">
+                <div className="flex items-center gap-2 w-full">
+                  <div className="w-2 h-2 bg-primary rounded-full"></div>
+                  <span className="font-medium text-sm">Vendor Renewal Alert</span>
+                  <span className="text-xs text-muted-foreground ml-auto">2 hours ago</span>
+                </div>
+                <p className="text-xs text-muted-foreground mt-1">TechCorp contract expires in 7 days. Review renewal terms.</p>
+              </DropdownMenuItem>
+              <DropdownMenuItem className="flex flex-col items-start p-4 hover:bg-secondary cursor-pointer">
+                <div className="flex items-center gap-2 w-full">
+                  <div className="w-2 h-2 bg-primary rounded-full"></div>
+                  <span className="font-medium text-sm">New Vendor Application</span>
+                  <span className="text-xs text-muted-foreground ml-auto">5 hours ago</span>
+                </div>
+                <p className="text-xs text-muted-foreground mt-1">CloudSolutions Inc. submitted application for review.</p>
+              </DropdownMenuItem>
+              <DropdownMenuItem className="flex flex-col items-start p-4 hover:bg-secondary cursor-pointer">
+                <div className="flex items-center gap-2 w-full">
+                  <div className="w-2 h-2 bg-primary rounded-full"></div>
+                  <span className="font-medium text-sm">Risk Assessment Due</span>
+                  <span className="text-xs text-muted-foreground ml-auto">1 day ago</span>
+                </div>
+                <p className="text-xs text-muted-foreground mt-1">DataFlow Ltd risk assessment needs immediate attention.</p>
+              </DropdownMenuItem>
+            </div>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem className="text-center text-primary hover:bg-secondary cursor-pointer">
+              View all notifications
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
         
         <div className="flex items-center gap-3">
           <div className="text-right">
