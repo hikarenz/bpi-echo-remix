@@ -7,7 +7,6 @@ import {
   ClipboardCheck, 
   UserPlus, 
   Activity, 
-  RefreshCw, 
   UserX,
   Bot,
   ChevronLeft
@@ -23,7 +22,6 @@ interface SidebarProps {
 const adminNavigationItems = [
   { name: 'Dashboard', href: '/', icon: LayoutDashboard },
   { name: 'Manage Vendors', href: '/manage-vendors', icon: UserPlus },
-  { name: 'Renewal Management', href: '/renewal-exit', icon: RefreshCw },
   { name: 'Echo AI', href: '/echo-ai', icon: Bot },
 ];
 

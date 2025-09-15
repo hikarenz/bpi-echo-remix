@@ -5,7 +5,8 @@ import {
   UserPlus, 
   UserMinus, 
   ArrowLeft,
-  ChevronLeft
+  ChevronLeft,
+  RefreshCw
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -19,6 +20,7 @@ const manageVendorsNavigationItems = [
   { name: 'Dashboard', href: '/manage-vendors', icon: LayoutDashboard },
   { name: 'Vendor Application Portal', href: '/manage-vendors/application-portal', icon: FileText },
   { name: 'Add Vendor', href: '/manage-vendors/add-vendor', icon: UserPlus },
+  { name: 'Renewal Management', href: '/renewal-exit', icon: RefreshCw },
   { name: 'Back', href: '/', icon: ArrowLeft },
 ];
 
