@@ -53,6 +53,9 @@ VALUES (
       SELECT 1 FROM profiles 
       WHERE id = auth.uid() AND role = ''bpi_admin''
     )
+    OR
+    -- Admin users from JWT token
+    (auth.jwt() ->> ''role'') = ''admin''
   )',
   NULL,
   'SELECT'

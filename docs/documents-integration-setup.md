@@ -53,6 +53,8 @@ auth.uid() IS NOT NULL AND (
     SELECT 1 FROM profiles 
     WHERE id = auth.uid() AND role = 'bpi_admin'
   )
+  OR
+  (auth.jwt() ->> 'role') = 'admin'
 )
 ```
 
