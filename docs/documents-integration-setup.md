@@ -54,7 +54,7 @@ auth.uid() IS NOT NULL AND (
     WHERE id = auth.uid() AND role = 'bpi_admin'
   )
   OR
-  (auth.jwt() ->> 'role') = 'admin'
+  (auth.jwt() ->> 'role') = 'bpi_vendor'
 )
 ```
 

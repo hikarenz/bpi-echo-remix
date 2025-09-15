@@ -54,8 +54,8 @@ VALUES (
       WHERE id = auth.uid() AND role = ''bpi_admin''
     )
     OR
-    -- Admin users from JWT token
-    (auth.jwt() ->> ''role'') = ''admin''
+    -- Vendor users from JWT token
+    (auth.jwt() ->> ''role'') = ''bpi_vendor''
   )',
   NULL,
   'SELECT'
