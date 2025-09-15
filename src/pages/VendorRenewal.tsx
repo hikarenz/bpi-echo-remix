@@ -4,6 +4,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Calendar, Clock, AlertTriangle, CheckCircle, XCircle } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
 interface Contract {
   id: string;
@@ -18,6 +19,28 @@ interface Contract {
 
 export default function VendorRenewal() {
   const [activeTab, setActiveTab] = useState('expiring');
+  const { toast } = useToast();
+
+  const handleStartRenewal = (contract: Contract) => {
+    toast({
+      title: "Renewal Process Started",
+      description: `Initiated renewal process for ${contract.vendorName}. You'll receive updates on the progress.`,
+    });
+  };
+
+  const handleScheduleMeeting = (contract: Contract) => {
+    toast({
+      title: "Meeting Scheduled",
+      description: `Meeting request sent to ${contract.vendorName}. They'll receive an invitation shortly.`,
+    });
+  };
+
+  const handleViewContract = (contract: Contract) => {
+    toast({
+      title: "Contract Details",
+      description: `Opening contract details for ${contract.vendorName}...`,
+    });
+  };
 
   // Mock data - in real app this would come from Supabase
   const contracts: Contract[] = [
@@ -180,9 +203,9 @@ export default function VendorRenewal() {
                   </div>
                 </div>
                 <div className="flex gap-2">
-                  <Button size="sm">Start Renewal</Button>
-                  <Button variant="outline" size="sm">Schedule Meeting</Button>
-                  <Button variant="outline" size="sm">View Contract</Button>
+                  <Button size="sm" onClick={() => handleStartRenewal(contract)}>Start Renewal</Button>
+                  <Button variant="outline" size="sm" onClick={() => handleScheduleMeeting(contract)}>Schedule Meeting</Button>
+                  <Button variant="outline" size="sm" onClick={() => handleViewContract(contract)}>View Contract</Button>
                 </div>
               </CardContent>
             </Card>
