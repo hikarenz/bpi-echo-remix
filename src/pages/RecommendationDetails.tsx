@@ -1,5 +1,8 @@
 import { useParams, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 import { ArrowLeft, Zap, AlertCircle, Clock, CheckCircle, Brain, Target, TrendingUp } from 'lucide-react';
+import MeetingSchedulerModal from '@/components/renewal/MeetingSchedulerModal';
+import { useToast } from '@/hooks/use-toast';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -72,9 +75,19 @@ const aiRecommendations = [
 export default function RecommendationDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { toast } = useToast();
+  
+  const [isScheduleModalOpen, setIsScheduleModalOpen] = useState(false);
   
   const recommendationIndex = parseInt(id || '0');
   const recommendation = aiRecommendations[recommendationIndex];
+
+  const handleScheduleMeeting = (contract: any, meetingData: any) => {
+    toast({
+      title: "Meeting Scheduled",
+      description: `Follow-up meeting scheduled for ${recommendation.vendor}`,
+    });
+  };
 
   if (!recommendation) {
     return (
@@ -252,11 +265,26 @@ export default function RecommendationDetails() {
             <CheckCircle className="mr-2 h-4 w-4" />
             Mark as Acknowledged
           </Button>
-          <Button variant="outline" className="flex-1">
+          <Button variant="outline" className="flex-1" onClick={() => setIsScheduleModalOpen(true)}>
             <Clock className="mr-2 h-4 w-4" />
             Schedule Follow-up
           </Button>
         </div>
+        
+        <MeetingSchedulerModal
+          isOpen={isScheduleModalOpen}
+          onClose={() => setIsScheduleModalOpen(false)}
+          contract={{
+            id: '1',
+            vendorName: recommendation.vendor,
+            contractType: recommendation.type,
+            value: recommendation.details.contractValue || 'N/A',
+            expiryDate: recommendation.details.expirationDate || 'N/A',
+            status: 'expiring' as const,
+            riskLevel: recommendation.urgency.toLowerCase() as 'high' | 'medium' | 'low'
+          }}
+          onScheduleMeeting={handleScheduleMeeting}
+        />
       </div>
     </div>
   );
