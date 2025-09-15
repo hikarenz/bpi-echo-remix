@@ -1,85 +1,93 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Calendar, Clock, AlertTriangle, CheckCircle, XCircle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import RenewalWorkflowModal from '@/components/renewal/RenewalWorkflowModal';
+import ContractViewerModal from '@/components/renewal/ContractViewerModal';
+import MeetingSchedulerModal from '@/components/renewal/MeetingSchedulerModal';
 
 interface Contract {
   id: string;
   vendorName: string;
   contractType: string;
-  currentValue: number;
+  value: string;
   expiryDate: string;
-  status: 'expiring_soon' | 'renewal_in_progress' | 'expired' | 'renewed';
-  daysUntilExpiry: number;
+  status: 'expiring' | 'in-progress' | 'renewed' | 'expired';
   riskLevel: 'low' | 'medium' | 'high';
 }
 
 export default function VendorRenewal() {
   const [activeTab, setActiveTab] = useState('expiring');
+  const [contracts, setContracts] = useState<Contract[]>([
+    // Mock data - in real app this would come from Supabase
+    { id: '1', vendorName: 'TechCorp Solutions', contractType: 'Software License', value: '$45,000', expiryDate: '2024-03-15', status: 'expiring', riskLevel: 'medium' },
+    { id: '2', vendorName: 'DataFlow Systems', contractType: 'Cloud Services', value: '$78,000', expiryDate: '2024-03-20', status: 'expiring', riskLevel: 'high' },
+    { id: '3', vendorName: 'SecureNet Inc', contractType: 'Security Services', value: '$32,000', expiryDate: '2024-03-25', status: 'expiring', riskLevel: 'low' },
+    { id: '4', vendorName: 'CloudTech Pro', contractType: 'Infrastructure', value: '$95,000', expiryDate: '2024-04-01', status: 'in-progress', riskLevel: 'medium' },
+    { id: '5', vendorName: 'DevTools Ltd', contractType: 'Development Tools', value: '$28,000', expiryDate: '2024-04-10', status: 'in-progress', riskLevel: 'low' },
+    { id: '6', vendorName: 'Analytics Plus', contractType: 'Analytics Platform', value: '$65,000', expiryDate: '2024-02-28', status: 'renewed', riskLevel: 'low' },
+    { id: '7', vendorName: 'Support Solutions', contractType: 'Help Desk', value: '$41,000', expiryDate: '2024-02-15', status: 'expired', riskLevel: 'high' },
+  ]);
+  
+  const [modals, setModals] = useState({
+    renewalWorkflow: false,
+    contractViewer: false,
+    meetingScheduler: false
+  });
+  
+  const [selectedContract, setSelectedContract] = useState<Contract | null>(null);
   const { toast } = useToast();
 
   const handleStartRenewal = (contract: Contract) => {
-    toast({
-      title: "Renewal Process Started",
-      description: `Initiated renewal process for ${contract.vendorName}. You'll receive updates on the progress.`,
-    });
+    setSelectedContract(contract);
+    setModals(prev => ({ ...prev, renewalWorkflow: true }));
   };
 
   const handleScheduleMeeting = (contract: Contract) => {
-    toast({
-      title: "Meeting Scheduled",
-      description: `Meeting request sent to ${contract.vendorName}. They'll receive an invitation shortly.`,
-    });
+    setSelectedContract(contract);
+    setModals(prev => ({ ...prev, meetingScheduler: true }));
   };
 
   const handleViewContract = (contract: Contract) => {
+    setSelectedContract(contract);
+    setModals(prev => ({ ...prev, contractViewer: true }));
+  };
+
+  const handleUpdateContract = (contractId: string, updates: Partial<Contract>) => {
+    setContracts(prev => 
+      prev.map(contract => 
+        contract.id === contractId 
+          ? { ...contract, ...updates }
+          : contract
+      )
+    );
+    
     toast({
-      title: "Contract Details",
-      description: `Opening contract details for ${contract.vendorName}...`,
+      title: "Contract Updated",
+      description: "The contract has been successfully updated.",
     });
   };
 
-  // Mock data - in real app this would come from Supabase
-  const contracts: Contract[] = [
-    {
-      id: '1',
-      vendorName: 'TechCorp Solutions',
-      contractType: 'Software License',
-      currentValue: 120000,
-      expiryDate: '2024-10-15',
-      status: 'expiring_soon',
-      daysUntilExpiry: 30,
-      riskLevel: 'high'
-    },
-    {
-      id: '2',
-      vendorName: 'DataFlow Systems',
-      contractType: 'Cloud Services',
-      currentValue: 85000,
-      expiryDate: '2024-11-22',
-      status: 'expiring_soon',
-      daysUntilExpiry: 68,
-      riskLevel: 'medium'
-    },
-    {
-      id: '3',
-      vendorName: 'SecureNet Inc',
-      contractType: 'Security Services',
-      currentValue: 95000,
-      expiryDate: '2024-09-30',
-      status: 'renewal_in_progress',
-      daysUntilExpiry: 15,
-      riskLevel: 'low'
-    }
-  ];
+  const handleMeetingScheduled = (contract: Contract, meetingData: any) => {
+    toast({
+      title: "Meeting Scheduled",
+      description: `Meeting scheduled with ${contract.vendorName} for ${meetingData.date} at ${meetingData.time}.`,
+    });
+  };
+
+  const closeModal = (modalName: keyof typeof modals) => {
+    setModals(prev => ({ ...prev, [modalName]: false }));
+    setSelectedContract(null);
+  };
+
 
   const getStatusColor = (status: Contract['status']) => {
     switch (status) {
-      case 'expiring_soon': return 'bg-yellow-500/10 text-yellow-700 border-yellow-200';
-      case 'renewal_in_progress': return 'bg-blue-500/10 text-blue-700 border-blue-200';
+      case 'expiring': return 'bg-yellow-500/10 text-yellow-700 border-yellow-200';
+      case 'in-progress': return 'bg-blue-500/10 text-blue-700 border-blue-200';
       case 'expired': return 'bg-red-500/10 text-red-700 border-red-200';
       case 'renewed': return 'bg-green-500/10 text-green-700 border-green-200';
       default: return 'bg-gray-500/10 text-gray-700 border-gray-200';
@@ -96,8 +104,8 @@ export default function VendorRenewal() {
 
   const filterContracts = (tab: string) => {
     switch (tab) {
-      case 'expiring': return contracts.filter(c => c.status === 'expiring_soon');
-      case 'in_progress': return contracts.filter(c => c.status === 'renewal_in_progress');
+      case 'expiring': return contracts.filter(c => c.status === 'expiring');
+      case 'in_progress': return contracts.filter(c => c.status === 'in-progress');
       case 'all': return contracts;
       default: return contracts;
     }
@@ -187,15 +195,17 @@ export default function VendorRenewal() {
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
                   <div>
                     <p className="text-sm text-muted-foreground">Contract Value</p>
-                    <p className="font-semibold">${contract.currentValue.toLocaleString()}</p>
+                    <p className="font-semibold">{contract.value}</p>
                   </div>
                   <div>
                     <p className="text-sm text-muted-foreground">Expiry Date</p>
-                    <p className="font-semibold">{new Date(contract.expiryDate).toLocaleDateString()}</p>
+                    <p className="font-semibold">{contract.expiryDate}</p>
                   </div>
                   <div>
-                    <p className="text-sm text-muted-foreground">Days Until Expiry</p>
-                    <p className="font-semibold">{contract.daysUntilExpiry} days</p>
+                    <p className="text-sm text-muted-foreground">Status</p>
+                    <Badge className={getStatusColor(contract.status)}>
+                      {contract.status.replace('-', ' ').toUpperCase()}
+                    </Badge>
                   </div>
                   <div>
                     <p className="text-sm text-muted-foreground">Risk Level</p>
@@ -212,6 +222,27 @@ export default function VendorRenewal() {
           ))}
         </TabsContent>
       </Tabs>
+
+      {/* Modals */}
+      <RenewalWorkflowModal
+        isOpen={modals.renewalWorkflow}
+        onClose={() => closeModal('renewalWorkflow')}
+        contract={selectedContract}
+        onUpdateContract={handleUpdateContract}
+      />
+      
+      <ContractViewerModal
+        isOpen={modals.contractViewer}
+        onClose={() => closeModal('contractViewer')}
+        contract={selectedContract}
+      />
+      
+      <MeetingSchedulerModal
+        isOpen={modals.meetingScheduler}
+        onClose={() => closeModal('meetingScheduler')}
+        contract={selectedContract}
+        onScheduleMeeting={handleMeetingScheduled}
+      />
     </div>
   );
 }
