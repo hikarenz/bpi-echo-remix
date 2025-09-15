@@ -19,9 +19,15 @@ export function TopNavigation({ onSidebarToggle }: TopNavigationProps) {
 
   const handleSignOut = async () => {
     try {
+      console.log('Attempting to sign out...');
       await signOut();
+      console.log('Sign out successful, redirecting...');
+      // Force navigation to auth page
+      navigate('/auth');
     } catch (error) {
       console.error('Error signing out:', error);
+      // Still try to navigate to auth even if there's an error
+      navigate('/auth');
     }
   };
 

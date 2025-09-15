@@ -13,8 +13,10 @@ export function AuthGuard({ children, requireRole, redirectTo = '/auth' }: AuthG
   const navigate = useNavigate();
 
   useEffect(() => {
+    console.log('AuthGuard: user =', user, 'loading =', loading);
     if (!loading && !user) {
-      navigate(redirectTo);
+      console.log('AuthGuard: No authenticated user, redirecting to', redirectTo);
+      navigate(redirectTo, { replace: true });
     }
   }, [user, loading, navigate, redirectTo]);
 
