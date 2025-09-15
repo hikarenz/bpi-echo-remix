@@ -10,17 +10,67 @@ The documents integration allows vendors to upload, view, and manage compliance 
 
 The documents storage bucket has been created in your Supabase dashboard. Now you need to set up the Row Level Security (RLS) policies for proper access control.
 
-#### Run RLS Policies Setup
+#### Set Up RLS Policies via Supabase Dashboard
 
-1. Go to your Supabase dashboard → SQL Editor
-2. Copy and paste the contents from `docs/storage-rls-setup.sql`
-3. Run the SQL commands to set up the RLS policies
+**IMPORTANT**: Use the Supabase Dashboard to create storage policies, not SQL Editor.
 
-The policies will:
-- Allow vendors to upload documents to their company folder
-- Allow vendors to view their own documents
-- Allow admins to view all documents  
-- Allow vendors to delete/update their own documents
+1. Go to your Supabase Dashboard → **Storage** → **Policies**
+2. Select the `documents` bucket
+3. Create these three policies by clicking "New Policy":
+
+**Policy 1: Allow Upload**
+- Name: `Vendors can upload documents to their company folder`
+- Policy command: `INSERT` 
+- Target roles: `authenticated`
+- Policy definition:
+```sql
+auth.uid() IS NOT NULL AND 
+(storage.foldername(name))[1] = 'compliance_documents' AND 
+(storage.foldername(name))[2] IN (
+  SELECT vc.id::text 
+  FROM vendor_companies vc 
+  JOIN vendor_users vu ON vu.vendor_company_id = vc.id 
+  WHERE vu.user_id = auth.uid()
+)
+```
+
+**Policy 2: Allow View**
+- Name: `Vendors can view their own documents, admins can view all`
+- Policy command: `SELECT`
+- Target roles: `authenticated`  
+- Policy definition:
+```sql
+auth.uid() IS NOT NULL AND (
+  (storage.foldername(name))[1] = 'compliance_documents' AND 
+  (storage.foldername(name))[2] IN (
+    SELECT vc.id::text 
+    FROM vendor_companies vc 
+    JOIN vendor_users vu ON vu.vendor_company_id = vc.id 
+    WHERE vu.user_id = auth.uid()
+  )
+  OR
+  EXISTS (
+    SELECT 1 FROM profiles 
+    WHERE id = auth.uid() AND role = 'admin'
+  )
+)
+```
+
+**Policy 3: Allow Delete**
+- Name: `Vendors can delete their own documents`
+- Policy command: `DELETE`
+- Target roles: `authenticated`
+- Policy definition:
+```sql
+auth.uid() IS NOT NULL AND 
+(storage.foldername(name))[1] = 'compliance_documents' AND 
+(storage.foldername(name))[2] IN (
+  SELECT vc.id::text 
+  FROM vendor_companies vc 
+  JOIN vendor_users vu ON vu.vendor_company_id = vc.id 
+  WHERE vu.user_id = auth.uid()
+)
+```
 
 ### 2. Verify Integration
 
