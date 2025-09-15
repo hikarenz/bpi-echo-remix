@@ -115,11 +115,24 @@ export default function VendorOnboarding() {
   );
 
   const handleStepClick = (stepId: number) => {
+    console.log('Step button clicked:', stepId);
+    
     // Handle different step actions
     switch (stepId) {
       case 1:
-        // Compliance Documents Upload - scroll to documents section
-        document.getElementById('compliance-documents')?.scrollIntoView({ behavior: 'smooth' });
+        // Compliance Documents Upload - scroll to documents section and highlight it
+        console.log('Scrolling to compliance documents section');
+        const element = document.getElementById('compliance-documents');
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          // Add a temporary highlight effect
+          element.style.boxShadow = '0 0 20px rgba(59, 130, 246, 0.5)';
+          setTimeout(() => {
+            element.style.boxShadow = '';
+          }, 3000);
+        } else {
+          console.error('compliance-documents element not found');
+        }
         break;
       case 2:
         // Payment Setup
@@ -130,7 +143,7 @@ export default function VendorOnboarding() {
         alert('Security assessment will be conducted by our team after initial approval.');
         break;
       default:
-        console.log('Step clicked:', stepId);
+        console.log('Unknown step clicked:', stepId);
     }
   };
 
