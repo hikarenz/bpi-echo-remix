@@ -8,6 +8,7 @@ import { Progress } from '@/components/ui/progress';
 import { CheckCircle, Clock, AlertTriangle, FileText, CreditCard, Shield } from 'lucide-react';
 import { OnboardingGuard } from '@/components/auth/OnboardingGuard';
 import { DocumentUploadModal } from '@/components/vendor/DocumentUploadModal';
+import { DocumentViewer } from '@/components/vendor/DocumentViewer';
 
 const onboardingSteps = [
   { 
@@ -82,6 +83,8 @@ export default function VendorOnboarding() {
   const [uploadModalOpen, setUploadModalOpen] = useState(false);
   const [selectedDocument, setSelectedDocument] = useState<string>('');
   const [documents, setDocuments] = useState<any[]>([]);
+  const [viewerModalOpen, setViewerModalOpen] = useState(false);
+  const [selectedDocumentForView, setSelectedDocumentForView] = useState<any>(null);
 
   const fetchDocuments = async (vendorCompanyId: string) => {
     try {
@@ -188,9 +191,13 @@ export default function VendorOnboarding() {
   const handleDocumentAction = (docId: number, docName: string, status: string) => {
     console.log('Document button clicked:', docId, docName, status);
     
-    if (status === "compliant") {
-      // View document - can add view functionality later
-      alert(`Viewing ${docName} - Document successfully uploaded and approved.`);
+    if (status === "compliant" || status === "under_review" || status === "rejected") {
+      // View document
+      const doc = documents.find(d => d.document_name === docName);
+      if (doc) {
+        setSelectedDocumentForView(doc);
+        setViewerModalOpen(true);
+      }
     } else {
       // Upload document
       setSelectedDocument(docName);
@@ -340,13 +347,18 @@ export default function VendorOnboarding() {
                         )}
                       </div>
                     </div>
-                    <Button 
-                      size="sm" 
-                      variant="outline"
-                      onClick={() => handleDocumentAction(doc.id, doc.name, docStatus)}
-                    >
-                      {docStatus === "compliant" ? "View" : "Upload"}
-                    </Button>
+                     <Button 
+                       size="sm" 
+                       variant={docStatus === "compliant" ? "outline" : 
+                               docStatus === "under_review" ? "secondary" :
+                               docStatus === "rejected" ? "destructive" : "default"}
+                       onClick={() => handleDocumentAction(doc.id, doc.name, docStatus)}
+                     >
+                       {docStatus === "not_submitted" && "Upload"}
+                       {docStatus === "under_review" && "View"}
+                       {docStatus === "compliant" && "View"}
+                       {docStatus === "rejected" && "Re-upload"}
+                     </Button>
                   </div>
                 );
               })}
@@ -378,6 +390,12 @@ export default function VendorOnboarding() {
         documentName={selectedDocument}
         vendorCompanyId={vendorCompany?.id || ''}
         onUploadComplete={handleUploadComplete}
+      />
+
+      <DocumentViewer
+        isOpen={viewerModalOpen}
+        onClose={() => setViewerModalOpen(false)}
+        document={selectedDocumentForView}
       />
     </OnboardingGuard>
   );

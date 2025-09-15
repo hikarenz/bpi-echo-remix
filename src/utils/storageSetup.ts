@@ -22,12 +22,52 @@ export async function setupStorageBucket() {
       };
     }
 
+    // Test upload permissions with a small test file
+    const testResult = await testUploadPermissions();
+    if (!testResult.success) {
+      return {
+        success: false,
+        error: `Storage permissions not configured: ${testResult.error}`
+      };
+    }
+
     return { success: true, message: 'Documents storage bucket is ready' };
   } catch (error: any) {
     console.error('Storage setup error:', error);
     return { 
       success: false, 
       error: 'Storage setup failed. Please ensure the documents bucket exists in your Supabase dashboard.' 
+    };
+  }
+}
+
+export async function testUploadPermissions() {
+  try {
+    // Try to upload a small test file to verify permissions
+    const testFile = new Blob(['test'], { type: 'text/plain' });
+    const testPath = `compliance_documents/test_${Date.now()}.txt`;
+    
+    const { error: uploadError } = await supabase.storage
+      .from('documents')
+      .upload(testPath, testFile);
+    
+    if (uploadError) {
+      return {
+        success: false,
+        error: `Upload test failed: ${uploadError.message}. Please ensure RLS policies are configured for the documents bucket.`
+      };
+    }
+    
+    // Clean up test file
+    await supabase.storage
+      .from('documents')
+      .remove([testPath]);
+    
+    return { success: true };
+  } catch (error: any) {
+    return {
+      success: false,
+      error: error.message
     };
   }
 }

@@ -6,6 +6,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { DocumentUpload } from './DocumentUpload';
+import { uploadDocument } from '@/utils/documentManagement';
 
 interface DocumentUploadModalProps {
   isOpen: boolean;
@@ -22,10 +23,24 @@ export function DocumentUploadModal({
   vendorCompanyId,
   onUploadComplete
 }: DocumentUploadModalProps) {
-  const handleUploadComplete = (filePath: string) => {
-    console.log('Document uploaded successfully:', filePath);
-    onUploadComplete?.();
-    onClose();
+  const [uploading, setUploading] = useState(false);
+
+  const handleFileUpload = async (file: File) => {
+    setUploading(true);
+    try {
+      const result = await uploadDocument(vendorCompanyId, documentName, file);
+      
+      if (result.success) {
+        onUploadComplete?.();
+        onClose();
+      } else {
+        console.error('Upload failed:', result.error);
+      }
+    } catch (error) {
+      console.error('Upload error:', error);
+    } finally {
+      setUploading(false);
+    }
   };
 
   return (
@@ -37,7 +52,11 @@ export function DocumentUploadModal({
         <DocumentUpload
           documentName={documentName}
           vendorCompanyId={vendorCompanyId}
-          onUploadComplete={handleUploadComplete}
+          onUploadComplete={(filePath: string) => {
+            console.log('Document uploaded successfully:', filePath);
+            onUploadComplete?.();
+            onClose();
+          }}
         />
       </DialogContent>
     </Dialog>

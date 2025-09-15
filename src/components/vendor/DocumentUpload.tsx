@@ -52,6 +52,13 @@ export function DocumentUpload({
           }
           setStorageReady(true);
         } else {
+          // Test upload permissions
+          const testResult = await setupStorageBucket();
+          if (!testResult.success) {
+            setStorageReady(false);
+            setError(testResult.error);
+            return;
+          }
           setStorageReady(true);
         }
       } catch (error: any) {
