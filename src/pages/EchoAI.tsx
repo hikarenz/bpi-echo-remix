@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Brain, Search, Target, Shield, TrendingUp, AlertCircle, CheckCircle, Users, BarChart3, FileText, Zap } from 'lucide-react';
+import { Brain, Search, Target, Shield, TrendingUp, AlertCircle, CheckCircle, Users, BarChart3, FileText, Zap, Eye, Scale, Database, Clock, Lightbulb } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -383,20 +383,98 @@ export default function EchoAI() {
   const [queryType, setQueryType] = useState('selection');
   const [isProcessing, setIsProcessing] = useState(false);
   const [filteredResults, setFilteredResults] = useState<any[]>([]);
+  const [analysisSteps, setAnalysisSteps] = useState<any[]>([]);
+  const [confidenceScore, setConfidenceScore] = useState(0);
+  const [methodology, setMethodology] = useState<any>(null);
 
   const handleQuery = () => {
     if (!activeQuery.trim()) return;
     
     setIsProcessing(true);
     setFilteredResults([]);
+    setAnalysisSteps([]);
+    setConfidenceScore(0);
+    setMethodology(null);
     
-    // Simulate AI processing delay
+    // Simulate AI processing with step-by-step analysis
+    const steps = [];
+    let currentStep = 0;
+    
+    const processStep = (stepInfo: any) => {
+      setTimeout(() => {
+        setAnalysisSteps(prev => [...prev, stepInfo]);
+      }, currentStep * 800);
+      currentStep++;
+    };
+    
+    // Step 1: Query Analysis
+    processStep({
+      step: 1,
+      title: "Query Analysis & Intent Recognition",
+      description: "Analyzing user query to identify intent, keywords, and requirements",
+      details: [
+        `Detected query type: ${queryType}`,
+        `Key terms identified: ${activeQuery.toLowerCase().split(' ').slice(0, 3).join(', ')}`,
+        `Analysis scope: ${queryType === 'selection' ? 'Vendor assessment and recommendation' : queryType === 'optimization' ? 'Partnership synergies and cost optimization' : 'Compliance risk evaluation'}`
+      ],
+      confidence: 95,
+      dataSource: "Natural Language Processing Engine"
+    });
+    
+    // Step 2: Data Retrieval
+    processStep({
+      step: 2,
+      title: "Data Source Integration",
+      description: "Accessing relevant databases and applying business rules",
+      details: [
+        `Vendor database: ${vendorAssessments.length} active assessments`,
+        `Compliance database: ${complianceRisks.length} risk evaluations`,
+        `BSP regulations: 3 active circulars (982, 1007, 1198)`,
+        `Historical performance data: 24 months lookback`
+      ],
+      confidence: 90,
+      dataSource: "Integrated Vendor Management System"
+    });
+    
+    // Step 3: Scoring Algorithm
+    processStep({
+      step: 3,
+      title: "Multi-Criteria Decision Analysis",
+      description: "Applying weighted scoring methodology for objective evaluation",
+      details: [
+        "Compatibility Score (30%): Technical alignment with BPI systems",
+        "Compliance Risk (25%): BSP regulatory adherence assessment", 
+        "Strategic Alignment (20%): Business objective compatibility",
+        "Cost-Benefit Analysis (15%): Total cost of ownership evaluation",
+        "Vendor Stability (10%): Financial and operational reliability"
+      ],
+      confidence: 88,
+      dataSource: "Proprietary Scoring Algorithm v2.1"
+    });
+    
+    // Step 4: Risk Assessment
+    processStep({
+      step: 4,
+      title: "Risk Factor Analysis",
+      description: "Evaluating potential risks and mitigation strategies",
+      details: [
+        "Operational risk assessment completed",
+        "Regulatory compliance gaps identified",
+        "Vendor concentration risk evaluated",
+        "Exit strategy complexity assessed"
+      ],
+      confidence: 85,
+      dataSource: "Risk Management Framework"
+    });
+    
+    // Step 5: Generate Results
     setTimeout(() => {
       let results = [];
+      let confidence = 0;
+      let methodologyInfo = null;
       
       switch (queryType) {
         case 'selection':
-          // Filter vendors based on query keywords or return all assessments
           results = vendorAssessments.filter(vendor => 
             vendor.name.toLowerCase().includes(activeQuery.toLowerCase()) ||
             vendor.details.strengths.some(strength => 
@@ -406,7 +484,29 @@ export default function EchoAI() {
             activeQuery.toLowerCase().includes('assess') ||
             activeQuery.toLowerCase().includes('evaluate')
           );
-          if (results.length === 0) results = vendorAssessments;
+          if (results.length === 0) results = vendorAssessments.slice(0, 5);
+          confidence = 87;
+          methodologyInfo = {
+            title: "Vendor Selection Methodology",
+            approach: "Multi-Criteria Decision Analysis (MCDA)",
+            factors: [
+              { name: "Technical Compatibility", weight: "30%", description: "System integration capabilities and technical alignment" },
+              { name: "Regulatory Compliance", weight: "25%", description: "BSP circular adherence and regulatory risk assessment" },
+              { name: "Strategic Fit", weight: "20%", description: "Alignment with BPI's digital transformation strategy" },
+              { name: "Financial Viability", weight: "15%", description: "Cost-benefit analysis and total cost of ownership" },
+              { name: "Vendor Reliability", weight: "10%", description: "Track record, financial stability, and operational maturity" }
+            ],
+            limitations: [
+              "Analysis based on available vendor data as of last assessment",
+              "Market conditions and vendor capabilities may change",
+              "Scores reflect relative comparison within current vendor pool"
+            ],
+            biasConsiderations: [
+              "Historical preference for established vendors addressed through weighted scoring",
+              "Geographic proximity bias minimized through standardized criteria",
+              "Cost bias balanced against quality and compliance factors"
+            ]
+          };
           break;
           
         case 'optimization':
@@ -417,7 +517,28 @@ export default function EchoAI() {
             activeQuery.toLowerCase().includes('optimization') ||
             activeQuery.toLowerCase().includes('synergy')
           );
-          if (results.length === 0) results = ecosystemInsights;
+          if (results.length === 0) results = ecosystemInsights.slice(0, 4);
+          confidence = 82;
+          methodologyInfo = {
+            title: "Ecosystem Optimization Methodology",
+            approach: "Portfolio Theory Applied to Vendor Ecosystem",
+            factors: [
+              { name: "Synergy Potential", weight: "35%", description: "Complementary capabilities and integration opportunities" },
+              { name: "Cost Optimization", weight: "30%", description: "Economies of scale and scope through partnership" },
+              { name: "Risk Diversification", weight: "20%", description: "Vendor concentration risk reduction" },
+              { name: "Strategic Alignment", weight: "15%", description: "Contribution to overall business strategy" }
+            ],
+            limitations: [
+              "Savings estimates based on industry benchmarks and assumptions",
+              "Implementation complexity not fully quantified",
+              "Vendor willingness to collaborate not guaranteed"
+            ],
+            biasConsiderations: [
+              "Savings projections may be optimistic - conservative estimates used",
+              "Preference for larger vendors balanced with innovation potential",
+              "Integration complexity underweighting addressed through pilot programs"
+            ]
+          };
           break;
           
         case 'compliance':
@@ -428,13 +549,52 @@ export default function EchoAI() {
             activeQuery.toLowerCase().includes('risk') ||
             activeQuery.toLowerCase().includes('bsp')
           );
-          if (results.length === 0) results = complianceRisks;
+          if (results.length === 0) results = complianceRisks.slice(0, 6);
+          confidence = 92;
+          methodologyInfo = {
+            title: "Compliance Risk Assessment Methodology",
+            approach: "Risk-Based Compliance Monitoring Framework",
+            factors: [
+              { name: "Regulatory Adherence", weight: "40%", description: "Direct compliance with BSP circulars and requirements" },
+              { name: "Documentation Quality", weight: "25%", description: "Completeness and accuracy of compliance documentation" },
+              { name: "Audit Trail", weight: "20%", description: "Transparency and traceability of compliance activities" },
+              { name: "Remediation Capability", weight: "15%", description: "Ability to address compliance gaps promptly" }
+            ],
+            limitations: [
+              "Assessment based on available documentation and vendor declarations",
+              "Regulatory requirements subject to change",
+              "On-site audits may reveal additional compliance gaps"
+            ],
+            biasConsiderations: [
+              "Over-reliance on vendor self-reporting mitigated through third-party verification",
+              "Recent compliance issues weighted appropriately in scoring",
+              "Size bias addressed - small vendors not penalized for resource constraints"
+            ]
+          };
           break;
       }
       
       setFilteredResults(results);
+      setConfidenceScore(confidence);
+      setMethodology(methodologyInfo);
       setIsProcessing(false);
-    }, 2000);
+      
+      // Final step
+      setAnalysisSteps(prev => [...prev, {
+        step: 5,
+        title: "Analysis Complete",
+        description: `Generated ${results.length} recommendations with ${confidence}% confidence`,
+        details: [
+          `Results ranked by composite score`,
+          `Risk factors highlighted and addressed`,
+          `Methodology transparency provided`,
+          `Alternative options considered`
+        ],
+        confidence: confidence,
+        dataSource: "Integrated Analysis Engine"
+      }]);
+      
+    }, currentStep * 800 + 1000);
   };
 
   return (
@@ -535,6 +695,136 @@ export default function EchoAI() {
             {isProcessing ? 'Analyzing...' : 'Generate AI Analysis'}
           </Button>
           
+          {/* Analysis Process Transparency */}
+          {analysisSteps.length > 0 && (
+            <Card className="card-glossy mt-4">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Eye className="h-5 w-5 text-primary" />
+                  Analysis Process Transparency
+                </CardTitle>
+                <CardDescription>
+                  Step-by-step breakdown of how EchoAI reached its recommendations
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {analysisSteps.map((step, index) => (
+                    <div key={index} className="flex gap-4 p-4 bg-muted/20 rounded-lg border-l-4 border-primary/50">
+                      <div className="flex-shrink-0 w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center">
+                        <span className="text-sm font-semibold text-primary">{step.step}</span>
+                      </div>
+                      <div className="flex-1 space-y-2">
+                        <div className="flex items-center justify-between">
+                          <h4 className="font-semibold">{step.title}</h4>
+                          <div className="flex items-center gap-2">
+                            <Badge variant="outline" className="text-xs">
+                              {step.confidence}% confidence
+                            </Badge>
+                            <Badge variant="secondary" className="text-xs">
+                              <Database className="h-3 w-3 mr-1" />
+                              {step.dataSource}
+                            </Badge>
+                          </div>
+                        </div>
+                        <p className="text-sm text-muted-foreground">{step.description}</p>
+                        {step.details && (
+                          <ul className="text-xs space-y-1 text-muted-foreground pl-4">
+                            {step.details.map((detail: string, i: number) => (
+                              <li key={i} className="flex items-start gap-2">
+                                <div className="w-1 h-1 bg-primary/60 rounded-full mt-2 flex-shrink-0" />
+                                {detail}
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Methodology Explanation */}
+          {methodology && (
+            <Card className="card-glossy mt-4">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Scale className="h-5 w-5 text-primary" />
+                  {methodology.title}
+                </CardTitle>
+                <CardDescription>
+                  Detailed explanation of the analysis methodology and potential limitations
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div>
+                  <h4 className="font-semibold mb-2 flex items-center gap-2">
+                    <BarChart3 className="h-4 w-4" />
+                    Approach: {methodology.approach}
+                  </h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    {methodology.factors.map((factor: any, index: number) => (
+                      <div key={index} className="p-3 bg-muted/30 rounded-lg">
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="font-medium text-sm">{factor.name}</span>
+                          <Badge variant="outline" className="text-xs">{factor.weight}</Badge>
+                        </div>
+                        <p className="text-xs text-muted-foreground">{factor.description}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <h4 className="font-semibold mb-2 flex items-center gap-2 text-warning">
+                    <AlertCircle className="h-4 w-4" />
+                    Analysis Limitations
+                  </h4>
+                  <ul className="space-y-1">
+                    {methodology.limitations.map((limitation: string, index: number) => (
+                      <li key={index} className="text-sm text-muted-foreground flex items-start gap-2">
+                        <div className="w-1 h-1 bg-warning/60 rounded-full mt-2 flex-shrink-0" />
+                        {limitation}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div>
+                  <h4 className="font-semibold mb-2 flex items-center gap-2 text-success">
+                    <Lightbulb className="h-4 w-4" />
+                    Bias Considerations & Mitigation
+                  </h4>
+                  <ul className="space-y-1">
+                    {methodology.biasConsiderations.map((bias: string, index: number) => (
+                      <li key={index} className="text-sm text-muted-foreground flex items-start gap-2">
+                        <div className="w-1 h-1 bg-success/60 rounded-full mt-2 flex-shrink-0" />
+                        {bias}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="p-3 bg-primary/10 rounded-lg border border-primary/20">
+                  <div className="flex items-center gap-2 mb-1">
+                    <Target className="h-4 w-4 text-primary" />
+                    <span className="font-semibold text-primary">Overall Confidence Score</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <Progress value={confidenceScore} className="flex-1" />
+                    <span className="font-bold text-primary">{confidenceScore}%</span>
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Based on data quality ({confidenceScore > 85 ? 'High' : confidenceScore > 70 ? 'Medium' : 'Low'}), 
+                    methodology rigor, and historical accuracy of similar analyses
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
           {/* AI Results Display */}
           {filteredResults.length > 0 && (
             <Card className="card-glossy mt-4">
@@ -542,6 +832,11 @@ export default function EchoAI() {
                 <CardTitle className="flex items-center gap-2">
                   <Brain className="h-5 w-5 text-primary" />
                   EchoAI Analysis Results ({filteredResults.length} {queryType === 'selection' ? 'vendors' : queryType === 'optimization' ? 'opportunities' : 'risks'} found)
+                  {confidenceScore > 0 && (
+                    <Badge variant="outline" className="ml-auto">
+                      {confidenceScore}% confidence
+                    </Badge>
+                  )}
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -569,7 +864,17 @@ export default function EchoAI() {
                         </div>
                       </div>
                       <div className="mt-3 p-2 bg-primary/10 rounded text-sm">
-                        <span className="font-medium text-primary">Recommendation:</span> {vendor.recommendation}
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="font-medium text-primary">EchoAI Recommendation:</span>
+                          <Badge variant="outline" className="text-xs">
+                            Score: {vendor.compatibilityScore}/100
+                          </Badge>
+                        </div>
+                        <p>{vendor.recommendation}</p>
+                        <div className="mt-2 text-xs text-muted-foreground">
+                          <span className="font-medium">Key factors:</span> Compatibility ({vendor.compatibilityScore}%), 
+                          Risk Level ({vendor.complianceRisk}), Strategic Fit ({vendor.strategicAlignment})
+                        </div>
                       </div>
                     </div>
                   ))}
@@ -594,7 +899,17 @@ export default function EchoAI() {
                         </div>
                       </div>
                       <div className="p-2 bg-success/10 rounded text-sm">
-                        <span className="font-medium text-success">Recommendation:</span> {insight.recommendation}
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="font-medium text-success">EchoAI Recommendation:</span>
+                          <Badge variant="outline" className="text-xs">
+                            Savings: {insight.savings}
+                          </Badge>
+                        </div>
+                        <p>{insight.recommendation}</p>
+                        <div className="mt-2 text-xs text-muted-foreground">
+                          <span className="font-medium">Analysis basis:</span> Synergy potential, cost optimization, 
+                          and strategic alignment assessment
+                        </div>
                       </div>
                     </div>
                   ))}
@@ -626,7 +941,17 @@ export default function EchoAI() {
                         </div>
                       </div>
                       <div className="p-2 bg-warning/10 rounded text-sm">
-                        <span className="font-medium text-warning">Action Required:</span> {risk.action}
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="font-medium text-warning">Required Action:</span>
+                          <Badge variant={risk.risk === 'High' ? 'destructive' : risk.risk === 'Medium' ? 'secondary' : 'default'} className="text-xs">
+                            {risk.risk} Priority
+                          </Badge>
+                        </div>
+                        <p>{risk.action}</p>
+                        <div className="mt-2 text-xs text-muted-foreground">
+                          <span className="font-medium">Assessment basis:</span> {risk.circular} compliance review, 
+                          documentation audit, and risk impact analysis
+                        </div>
                       </div>
                     </div>
                   ))}
@@ -635,13 +960,31 @@ export default function EchoAI() {
             </Card>
           )}
           
-          {/* Loading State */}
+          {/* Loading State with Step Indicators */}
           {isProcessing && (
             <Card className="card-glossy mt-4">
               <CardContent className="p-6">
-                <div className="flex items-center justify-center space-x-2">
-                  <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary"></div>
-                  <span className="text-muted-foreground">EchoAI is analyzing your request...</span>
+                <div className="space-y-4">
+                  <div className="flex items-center justify-center space-x-2">
+                    <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary"></div>
+                    <span className="text-muted-foreground">EchoAI is analyzing your request...</span>
+                  </div>
+                  
+                  {analysisSteps.length > 0 && (
+                    <div className="space-y-2 mt-4">
+                      <h4 className="font-semibold text-sm text-center mb-3">Analysis Progress</h4>
+                      {analysisSteps.map((step, index) => (
+                        <div key={index} className="flex items-center gap-3 p-2 bg-muted/20 rounded text-sm">
+                          <CheckCircle className="h-4 w-4 text-success flex-shrink-0" />
+                          <span className="flex-1">{step.title}</span>
+                          <Badge variant="outline" className="text-xs">
+                            <Clock className="h-3 w-3 mr-1" />
+                            {step.confidence}%
+                          </Badge>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </CardContent>
             </Card>
