@@ -6,6 +6,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 import { useAuth } from '@/components/auth/AuthProvider';
 import { supabase } from '@/integrations/supabase/client';
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 interface TopNavigationProps {
   onSidebarToggle: () => void;
@@ -13,6 +14,7 @@ interface TopNavigationProps {
 
 export function TopNavigation({ onSidebarToggle }: TopNavigationProps) {
   const { user, signOut } = useAuth();
+  const navigate = useNavigate();
   const [userProfile, setUserProfile] = useState<{ role: string; first_name?: string; last_name?: string } | null>(null);
 
   const handleSignOut = async () => {
@@ -100,7 +102,10 @@ export function TopNavigation({ onSidebarToggle }: TopNavigationProps) {
             <DropdownMenuLabel className="font-semibold">Notifications</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <div className="max-h-96 overflow-y-auto">
-              <DropdownMenuItem className="flex flex-col items-start p-4 hover:bg-secondary cursor-pointer">
+              <DropdownMenuItem 
+                className="flex flex-col items-start p-4 hover:bg-secondary cursor-pointer"
+                onClick={() => navigate('/renewal-exit')}
+              >
                 <div className="flex items-center gap-2 w-full">
                   <div className="w-2 h-2 bg-primary rounded-full"></div>
                   <span className="font-medium text-sm">Vendor Renewal Alert</span>
@@ -108,7 +113,10 @@ export function TopNavigation({ onSidebarToggle }: TopNavigationProps) {
                 </div>
                 <p className="text-xs text-muted-foreground mt-1">TechCorp contract expires in 7 days. Review renewal terms.</p>
               </DropdownMenuItem>
-              <DropdownMenuItem className="flex flex-col items-start p-4 hover:bg-secondary cursor-pointer">
+              <DropdownMenuItem 
+                className="flex flex-col items-start p-4 hover:bg-secondary cursor-pointer"
+                onClick={() => navigate('/manage-vendors/application-portal')}
+              >
                 <div className="flex items-center gap-2 w-full">
                   <div className="w-2 h-2 bg-primary rounded-full"></div>
                   <span className="font-medium text-sm">New Vendor Application</span>
@@ -116,7 +124,10 @@ export function TopNavigation({ onSidebarToggle }: TopNavigationProps) {
                 </div>
                 <p className="text-xs text-muted-foreground mt-1">CloudSolutions Inc. submitted application for review.</p>
               </DropdownMenuItem>
-              <DropdownMenuItem className="flex flex-col items-start p-4 hover:bg-secondary cursor-pointer">
+              <DropdownMenuItem 
+                className="flex flex-col items-start p-4 hover:bg-secondary cursor-pointer"
+                onClick={() => navigate('/evaluation')}
+              >
                 <div className="flex items-center gap-2 w-full">
                   <div className="w-2 h-2 bg-primary rounded-full"></div>
                   <span className="font-medium text-sm">Risk Assessment Due</span>
@@ -126,7 +137,10 @@ export function TopNavigation({ onSidebarToggle }: TopNavigationProps) {
               </DropdownMenuItem>
             </div>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="text-center text-primary hover:bg-secondary cursor-pointer">
+            <DropdownMenuItem 
+              className="text-center text-primary hover:bg-secondary cursor-pointer"
+              onClick={() => navigate('/notifications')}
+            >
               View all notifications
             </DropdownMenuItem>
           </DropdownMenuContent>
