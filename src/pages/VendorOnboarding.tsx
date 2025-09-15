@@ -147,6 +147,18 @@ export default function VendorOnboarding() {
     }
   };
 
+  const handleDocumentAction = (docId: number, docName: string, status: string) => {
+    console.log('Document button clicked:', docId, docName, status);
+    
+    if (status === "completed") {
+      // View document
+      alert(`Viewing ${docName} - Document successfully uploaded and approved.`);
+    } else {
+      // Upload document
+      alert(`Upload ${docName} - Please select the document file to upload. This feature will be implemented in the next phase.`);
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -280,7 +292,11 @@ export default function VendorOnboarding() {
                       )}
                     </div>
                   </div>
-                  <Button size="sm" variant="outline">
+                  <Button 
+                    size="sm" 
+                    variant="outline"
+                    onClick={() => handleDocumentAction(doc.id, doc.name, doc.status)}
+                  >
                     {doc.status === "completed" ? "View" : "Upload"}
                   </Button>
                 </div>
