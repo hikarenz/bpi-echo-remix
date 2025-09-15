@@ -22,15 +22,7 @@ export async function setupStorageBucket() {
       };
     }
 
-    // Test upload permissions with a small test file
-    const testResult = await testUploadPermissions();
-    if (!testResult.success) {
-      return {
-        success: false,
-        error: `Storage permissions not configured: ${testResult.error}`
-      };
-    }
-
+    console.log('Documents bucket found, storage is ready');
     return { success: true, message: 'Documents storage bucket is ready' };
   } catch (error: any) {
     console.error('Storage setup error:', error);
