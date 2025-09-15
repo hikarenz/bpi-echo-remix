@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -98,7 +99,8 @@ const formatRiskLevel = (risk: string) => {
 };
 
 export default function ManageVendors() {
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const searchTerm = searchParams.get('search') || '';
   const [vendors, setVendors] = useState<Vendor[]>([]);
   const [loading, setLoading] = useState(true);
   const [editingVendor, setEditingVendor] = useState<Vendor | null>(null);
@@ -291,7 +293,16 @@ export default function ManageVendors() {
           <Input
             placeholder="Search vendors..."
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={(e) => {
+              const value = e.target.value;
+              const newSearchParams = new URLSearchParams(searchParams);
+              if (value) {
+                newSearchParams.set('search', value);
+              } else {
+                newSearchParams.delete('search');
+              }
+              setSearchParams(newSearchParams);
+            }}
             className="pl-8"
           />
         </div>

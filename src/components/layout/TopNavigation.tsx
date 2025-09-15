@@ -6,6 +6,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 import { useAuth } from '@/components/auth/AuthProvider';
 import { supabase } from '@/integrations/supabase/client';
 import { useState, useEffect } from 'react';
+import { useSearchParams, useLocation } from 'react-router-dom';
 
 interface TopNavigationProps {
   onSidebarToggle: () => void;
@@ -14,6 +15,9 @@ interface TopNavigationProps {
 export function TopNavigation({ onSidebarToggle }: TopNavigationProps) {
   const { user, signOut } = useAuth();
   const [userProfile, setUserProfile] = useState<{ role: string; first_name?: string; last_name?: string } | null>(null);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const location = useLocation();
+  const [searchValue, setSearchValue] = useState(searchParams.get('search') || '');
 
   const handleSignOut = async () => {
     try {
@@ -64,6 +68,30 @@ export function TopNavigation({ onSidebarToggle }: TopNavigationProps) {
     }
   };
 
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setSearchValue(value);
+    
+    // Only update URL params on pages that support search
+    const searchablePages = ['/manage-vendors'];
+    const isSearchablePage = searchablePages.some(page => location.pathname.includes(page));
+    
+    if (isSearchablePage) {
+      const newSearchParams = new URLSearchParams(searchParams);
+      if (value) {
+        newSearchParams.set('search', value);
+      } else {
+        newSearchParams.delete('search');
+      }
+      setSearchParams(newSearchParams);
+    }
+  };
+
+  // Sync search value with URL params
+  useEffect(() => {
+    setSearchValue(searchParams.get('search') || '');
+  }, [searchParams]);
+
   return (
     <header className="nav-glass h-16 flex items-center justify-between px-6 sticky top-0 z-50 border-b border-border/50 backdrop-blur-xl">
       <div className="flex items-center gap-4">
@@ -90,6 +118,8 @@ export function TopNavigation({ onSidebarToggle }: TopNavigationProps) {
           <Input
             placeholder="Search vendors, contracts, assessments..."
             className="pl-10 bg-secondary border-border-hover"
+            value={searchValue}
+            onChange={handleSearchChange}
           />
         </div>
       </div>
