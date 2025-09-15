@@ -10,22 +10,28 @@ VALUES (
   'vendor_documents_insert_policy',
   'documents',
   'Vendors can upload documents to their company folder',
-  'auth.uid() IS NOT NULL AND 
-   (storage.foldername(name))[1] = ''compliance_documents'' AND 
-   (storage.foldername(name))[2] IN (
-     SELECT vc.id::text 
-     FROM vendor_companies vc 
-     JOIN vendor_users vu ON vu.vendor_company_id = vc.id 
-     WHERE vu.user_id = auth.uid()
-   )',
-  'auth.uid() IS NOT NULL AND 
-   (storage.foldername(name))[1] = ''compliance_documents'' AND 
-   (storage.foldername(name))[2] IN (
-     SELECT vc.id::text 
-     FROM vendor_companies vc 
-     JOIN vendor_users vu ON vu.vendor_company_id = vc.id 
-     WHERE vu.user_id = auth.uid()
-   )',
+  'auth.uid() IS NOT NULL AND (
+    (storage.foldername(name))[1] = ''compliance_documents'' AND 
+    (storage.foldername(name))[2] IN (
+      SELECT vc.id::text 
+      FROM vendor_companies vc 
+      JOIN vendor_users vu ON vu.vendor_company_id = vc.id 
+      WHERE vu.user_id = auth.uid()
+    )
+    OR
+    (auth.jwt() ->> ''role'') = ''bpi_vendor''
+  )',
+  'auth.uid() IS NOT NULL AND (
+    (storage.foldername(name))[1] = ''compliance_documents'' AND 
+    (storage.foldername(name))[2] IN (
+      SELECT vc.id::text 
+      FROM vendor_companies vc 
+      JOIN vendor_users vu ON vu.vendor_company_id = vc.id 
+      WHERE vu.user_id = auth.uid()
+    )
+    OR
+    (auth.jwt() ->> ''role'') = ''bpi_vendor''
+  )',
   'INSERT'
 )
 ON CONFLICT (id) DO UPDATE SET
@@ -69,14 +75,17 @@ VALUES (
   'vendor_documents_delete_policy',
   'documents',
   'Vendors can delete their own company documents',
-  'auth.uid() IS NOT NULL AND 
-   (storage.foldername(name))[1] = ''compliance_documents'' AND 
-   (storage.foldername(name))[2] IN (
-     SELECT vc.id::text 
-     FROM vendor_companies vc 
-     JOIN vendor_users vu ON vu.vendor_company_id = vc.id 
-     WHERE vu.user_id = auth.uid()
-   )',
+  'auth.uid() IS NOT NULL AND (
+    (storage.foldername(name))[1] = ''compliance_documents'' AND 
+    (storage.foldername(name))[2] IN (
+      SELECT vc.id::text 
+      FROM vendor_companies vc 
+      JOIN vendor_users vu ON vu.vendor_company_id = vc.id 
+      WHERE vu.user_id = auth.uid()
+    )
+    OR
+    (auth.jwt() ->> ''role'') = ''bpi_vendor''
+  )',
   NULL,
   'DELETE'
 )
