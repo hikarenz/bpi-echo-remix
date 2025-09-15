@@ -26,6 +26,7 @@ import RemoveVendor from "./pages/RemoveVendor";
 import RecommendationDetails from "./pages/RecommendationDetails";
 import EchoAI from "./pages/EchoAI";
 import Notifications from "./pages/Notifications";
+import VendorRenewal from "./pages/VendorRenewal";
 
 const queryClient = new QueryClient();
 
@@ -45,7 +46,7 @@ const App = () => (
                 <Route path="evaluation" element={<Evaluation />} />
                 <Route path="onboarding" element={<Onboarding />} />
                 <Route path="active-management" element={<div className="p-8 text-center text-muted-foreground">Active Management page coming soon...</div>} />
-                <Route path="renewal-exit" element={<div className="p-8 text-center text-muted-foreground">Renewal/Exit page coming soon...</div>} />
+                <Route path="renewal-exit" element={<VendorRenewal />} />
                 <Route path="offboarding" element={<div className="p-8 text-center text-muted-foreground">Offboarding page coming soon...</div>} />
                 <Route path="notifications" element={<Notifications />} />
                 <Route path="echo-ai" element={<EchoAI />} />
