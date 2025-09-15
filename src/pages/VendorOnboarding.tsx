@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { CheckCircle, Clock, AlertTriangle, FileText, CreditCard, Shield } from 'lucide-react';
 import { OnboardingGuard } from '@/components/auth/OnboardingGuard';
+import { DocumentUploadModal } from '@/components/vendor/DocumentUploadModal';
 
 const onboardingSteps = [
   { 
@@ -44,10 +45,13 @@ const complianceDocuments = [
 
 const getStatusIcon = (status: string) => {
   switch (status) {
-    case "completed": 
+    case "compliant": 
+    case "completed":
       return <CheckCircle className="h-4 w-4 text-green-600" />;
+    case "under_review":
     case "in-progress": 
       return <Clock className="h-4 w-4 text-blue-600" />;
+    case "non_compliant":
     case "warning": 
       return <AlertTriangle className="h-4 w-4 text-amber-600" />;
     default: 
@@ -57,10 +61,16 @@ const getStatusIcon = (status: string) => {
 
 const getStepStatusVariant = (status: string) => {
   switch (status) {
-    case "completed": return "default";
-    case "in-progress": return "secondary";
-    case "not-started": return "outline";
-    default: return "outline";
+    case "compliant":
+    case "completed": 
+      return "default";
+    case "under_review":
+    case "in-progress": 
+      return "secondary";
+    case "not-started": 
+      return "outline";
+    default: 
+      return "outline";
   }
 };
 
@@ -69,6 +79,23 @@ export default function VendorOnboarding() {
   const [vendorCompany, setVendorCompany] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [steps, setSteps] = useState(onboardingSteps);
+  const [uploadModalOpen, setUploadModalOpen] = useState(false);
+  const [selectedDocument, setSelectedDocument] = useState<string>('');
+  const [documents, setDocuments] = useState<any[]>([]);
+
+  const fetchDocuments = async (vendorCompanyId: string) => {
+    try {
+      const { data, error } = await supabase
+        .from('compliance_documents')
+        .select('*')
+        .eq('vendor_company_id', vendorCompanyId);
+
+      if (error) throw error;
+      setDocuments(data || []);
+    } catch (error) {
+      console.error('Error fetching documents:', error);
+    }
+  };
 
   useEffect(() => {
     async function fetchVendorData() {
@@ -91,6 +118,11 @@ export default function VendorOnboarding() {
           .single();
 
         setVendorCompany(company);
+
+        // Fetch documents for this vendor
+        if (company) {
+          await fetchDocuments(company.id);
+        }
 
         // Update status to onboarding_in_progress if it's profile_approved
         if (company?.status === 'profile_approved') {
@@ -147,15 +179,29 @@ export default function VendorOnboarding() {
     }
   };
 
+  const getDocumentStatus = (docName: string) => {
+    const doc = documents.find(d => d.document_name === docName);
+    if (!doc) return "not_submitted";
+    return doc.status;
+  };
+
   const handleDocumentAction = (docId: number, docName: string, status: string) => {
     console.log('Document button clicked:', docId, docName, status);
     
-    if (status === "completed") {
-      // View document
+    if (status === "compliant") {
+      // View document - can add view functionality later
       alert(`Viewing ${docName} - Document successfully uploaded and approved.`);
     } else {
       // Upload document
-      alert(`Upload ${docName} - Please select the document file to upload. This feature will be implemented in the next phase.`);
+      setSelectedDocument(docName);
+      setUploadModalOpen(true);
+    }
+  };
+
+  const handleUploadComplete = () => {
+    // Refresh documents after upload
+    if (vendorCompany) {
+      fetchDocuments(vendorCompany.id);
     }
   };
 
@@ -281,26 +327,29 @@ export default function VendorOnboarding() {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-3">
-              {complianceDocuments.map((doc) => (
-                <div key={doc.id} className="flex items-center justify-between p-3 rounded-lg border border-border/50">
-                  <div className="flex items-center gap-3">
-                    {getStatusIcon(doc.status)}
-                    <div>
-                      <span className="text-sm font-medium">{doc.name}</span>
-                      {doc.required && (
-                        <Badge variant="outline" className="ml-2 text-xs">Required</Badge>
-                      )}
+              {complianceDocuments.map((doc) => {
+                const docStatus = getDocumentStatus(doc.name);
+                return (
+                  <div key={doc.id} className="flex items-center justify-between p-3 rounded-lg border border-border/50">
+                    <div className="flex items-center gap-3">
+                      {getStatusIcon(docStatus)}
+                      <div>
+                        <span className="text-sm font-medium">{doc.name}</span>
+                        {doc.required && (
+                          <Badge variant="outline" className="ml-2 text-xs">Required</Badge>
+                        )}
+                      </div>
                     </div>
+                    <Button 
+                      size="sm" 
+                      variant="outline"
+                      onClick={() => handleDocumentAction(doc.id, doc.name, docStatus)}
+                    >
+                      {docStatus === "compliant" ? "View" : "Upload"}
+                    </Button>
                   </div>
-                  <Button 
-                    size="sm" 
-                    variant="outline"
-                    onClick={() => handleDocumentAction(doc.id, doc.name, doc.status)}
-                  >
-                    {doc.status === "completed" ? "View" : "Upload"}
-                  </Button>
-                </div>
-              ))}
+                );
+              })}
             </CardContent>
           </Card>
         </div>
@@ -322,6 +371,14 @@ export default function VendorOnboarding() {
           </CardContent>
         </Card>
       </div>
+
+      <DocumentUploadModal
+        isOpen={uploadModalOpen}
+        onClose={() => setUploadModalOpen(false)}
+        documentName={selectedDocument}
+        vendorCompanyId={vendorCompany?.id || ''}
+        onUploadComplete={handleUploadComplete}
+      />
     </OnboardingGuard>
   );
 }
