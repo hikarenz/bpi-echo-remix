@@ -43,15 +43,14 @@ export function DocumentUpload({
         
         const documentsBucket = buckets?.find(bucket => bucket.name === 'documents');
         if (!documentsBucket) {
-          // Try to setup the bucket
+          // Try to setup the bucket (will return helpful error message)
           const setupResult = await setupStorageBucket();
-          if (setupResult.success) {
-            setStorageReady(true);
-            toast.success('Storage setup completed successfully');
-          } else {
+          if (!setupResult.success) {
             setStorageReady(false);
-            setError(`Storage setup failed: ${setupResult.error}`);
+            setError(setupResult.error);
+            return;
           }
+          setStorageReady(true);
         } else {
           setStorageReady(true);
         }
@@ -205,9 +204,13 @@ export function DocumentUpload({
               </p>
               
               {storageReady === false && (
-                <div className="mb-4 p-3 bg-destructive/10 text-destructive rounded-lg">
-                  <AlertCircle className="h-4 w-4 mx-auto mb-2" />
-                  <p className="text-sm">Storage is not ready. Please contact support for setup.</p>
+                <div className="mb-4 p-4 bg-destructive/10 text-destructive rounded-lg border border-destructive/20">
+                  <AlertCircle className="h-5 w-5 mx-auto mb-2" />
+                  <p className="text-sm font-medium mb-2">Storage Setup Required</p>
+                  <p className="text-xs">
+                    A storage bucket needs to be created in your Supabase dashboard. 
+                    Please contact your administrator or create a "documents" bucket in Supabase.
+                  </p>
                 </div>
               )}
               

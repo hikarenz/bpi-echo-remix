@@ -2,42 +2,33 @@ import { supabase } from '@/integrations/supabase/client';
 
 export async function setupStorageBucket() {
   try {
-    // Check if bucket exists
+    // Check if bucket exists (but don't try to create it from client side)
     const { data: buckets, error: listError } = await supabase.storage.listBuckets();
     
     if (listError) {
-      throw new Error(`Failed to list buckets: ${listError.message}`);
+      console.warn('Could not list storage buckets:', listError.message);
+      return { 
+        success: false, 
+        error: 'Storage access unavailable. Please ensure the documents bucket is created in Supabase dashboard.' 
+      };
     }
 
     const documentsBucket = buckets?.find(bucket => bucket.name === 'documents');
     
     if (!documentsBucket) {
-      // Create the documents bucket
-      const { error: createError } = await supabase.storage.createBucket('documents', {
-        public: false,
-        allowedMimeTypes: [
-          'application/pdf',
-          'application/msword', 
-          'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-          'image/jpeg',
-          'image/png',
-          'image/jpg'
-        ],
-        fileSizeLimit: 10485760 // 10MB
-      });
-
-      if (createError) {
-        throw new Error(`Failed to create bucket: ${createError.message}`);
-      }
-
-      console.log('Documents storage bucket created successfully');
-      return { success: true, message: 'Documents storage bucket created successfully' };
+      return { 
+        success: false, 
+        error: 'Documents storage bucket not found. Please create a "documents" bucket in your Supabase dashboard.' 
+      };
     }
 
-    return { success: true, message: 'Documents storage bucket already exists' };
+    return { success: true, message: 'Documents storage bucket is ready' };
   } catch (error: any) {
     console.error('Storage setup error:', error);
-    return { success: false, error: error.message };
+    return { 
+      success: false, 
+      error: 'Storage setup failed. Please ensure the documents bucket exists in your Supabase dashboard.' 
+    };
   }
 }
 
