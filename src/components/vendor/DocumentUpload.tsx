@@ -34,28 +34,30 @@ export function DocumentUpload({
   useEffect(() => {
     const checkStorage = async () => {
       try {
+        console.log('Checking storage buckets...');
         const { data: buckets, error } = await supabase.storage.listBuckets();
+        
         if (error) {
+          console.error('Error listing buckets:', error);
           setStorageReady(false);
           setError(`Storage not accessible: ${error.message}`);
           return;
         }
         
+        console.log('Found buckets:', buckets?.map(b => b.name));
         const documentsBucket = buckets?.find(bucket => bucket.name === 'documents');
+        
         if (!documentsBucket) {
-          // Try to setup the bucket (will return helpful error message)
-          const setupResult = await setupStorageBucket();
-          if (!setupResult.success) {
-            setStorageReady(false);
-            setError(setupResult.error);
-            return;
-          }
-          setStorageReady(true);
-        } else {
-          // Bucket exists, ready to use
-          setStorageReady(true);
+          console.warn('Documents bucket not found in:', buckets?.map(b => b.name));
+          setStorageReady(false);
+          setError('A storage bucket needs to be created in your Supabase dashboard. Please contact your administrator or create a "documents" bucket in Supabase.');
+          return;
         }
+        
+        console.log('Documents bucket found, storage is ready');
+        setStorageReady(true);
       } catch (error: any) {
+        console.error('Storage check error:', error);
         setStorageReady(false);
         setError(`Storage check failed: ${error.message}`);
       }
