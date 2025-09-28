@@ -114,10 +114,6 @@ export default function Auth() {
             )}
           </CardContent>
         </Card>
-
-        <div className="text-center text-xs text-muted-foreground">
-          Demo credentials are automatically handled - no signup required
-        </div>
       </div>
     </div>
   );
