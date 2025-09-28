@@ -21,12 +21,12 @@ export default function Auth() {
   // Demo credentials for different roles
   const demoCredentials = {
     admin: {
-      email: 'admin@bpi.com',
-      password: 'demo123'
+      email: 'hikarigeranium@gmail.com',
+      password: 'MakeMeEchoAdminYYY'
     },
     vendor: {
-      email: 'vendor@company.com', 
-      password: 'demo123'
+      email: 'renz.vidal@gmail.com', 
+      password: 'MariaSantos'
     }
   };
 
