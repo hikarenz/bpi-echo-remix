@@ -71,33 +71,25 @@ export default function Auth() {
               Select a role to explore the platform
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-4 flex flex-col items-center">
             <Button
               onClick={() => handleDemoLogin('admin')}
               disabled={loading}
-              className="w-full h-16 text-left flex items-center gap-4"
+              className="w-full max-w-xs h-16 flex items-center justify-center gap-4 hover-scale bg-gradient-to-r from-primary/10 to-primary/20 border-primary/30 hover:border-primary/50 hover:shadow-lg transition-all duration-300"
               variant="outline"
             >
-              <div className="flex-shrink-0">
-                <UserCheck className="h-8 w-8 text-primary" />
-              </div>
-              <div className="flex-1">
-                <div className="font-semibold">BPI Admin</div>
-              </div>
+              <UserCheck className="h-8 w-8 text-primary" />
+              <div className="font-semibold text-lg">BPI Admin</div>
             </Button>
 
             <Button
               onClick={() => handleDemoLogin('vendor')}
               disabled={loading}
-              className="w-full h-16 text-left flex items-center gap-4"
+              className="w-full max-w-xs h-16 flex items-center justify-center gap-4 hover-scale bg-gradient-to-r from-secondary/10 to-secondary/20 border-secondary/30 hover:border-secondary/50 hover:shadow-lg transition-all duration-300"
               variant="outline"
             >
-              <div className="flex-shrink-0">
-                <Users className="h-8 w-8 text-primary" />
-              </div>
-              <div className="flex-1">
-                <div className="font-semibold">Vendor</div>
-              </div>
+              <Users className="h-8 w-8 text-primary" />
+              <div className="font-semibold text-lg">Vendor</div>
             </Button>
 
             {loading && (
