@@ -97,9 +97,6 @@ export default function Auth() {
               </div>
               <div className="flex-1">
                 <div className="font-semibold">Vendor</div>
-                <div className="text-sm text-muted-foreground">
-                  Complete profile, upload documents, manage renewals
-                </div>
               </div>
             </Button>
 
