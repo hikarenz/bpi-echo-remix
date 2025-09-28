@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useAuth } from '@/components/auth/AuthProvider';
-import { AlertCircle, Building2, UserCheck, Users } from 'lucide-react';
+import { AlertCircle, Database, UserCheck, Users } from 'lucide-react';
 
 export default function Auth() {
   const [loading, setLoading] = useState(false);
@@ -49,7 +49,7 @@ export default function Auth() {
       <div className="w-full max-w-md space-y-6">
         <div className="text-center space-y-2">
           <div className="flex justify-center">
-            <Building2 className="h-12 w-12 text-primary" />
+            <Database className="h-12 w-12 text-primary" />
           </div>
           <h1 className="text-3xl font-bold">BPI HabiData</h1>
           <p className="text-muted-foreground">
