@@ -31,29 +31,29 @@ const handler = async (req: Request): Promise<Response> => {
     console.log("Invitation link:", invitationLink);
 
     const emailResponse = await resend.emails.send({
-      from: "BPI Vendor Portal <noreply@resend.dev>",
+      from: "BPI HabiData <noreply@resend.dev>",
       to: [recipientEmail],
-      subject: `Invitation to Join BPI Vendor Portal - ${companyName}`,
+      subject: `Invitation to Join BPI HabiData - ${companyName}`,
       html: `
         <!DOCTYPE html>
         <html>
         <head>
           <meta charset="utf-8">
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <title>BPI Vendor Portal Invitation</title>
+          <title>BPI HabiData Invitation</title>
         </head>
         <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
           <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; text-align: center; border-radius: 8px 8px 0 0;">
-            <h1 style="color: white; margin: 0; font-size: 28px;">BPI Vendor Portal</h1>
+            <h1 style="color: white; margin: 0; font-size: 28px;">BPI HabiData</h1>
             <p style="color: rgba(255,255,255,0.9); margin: 10px 0 0 0; font-size: 16px;">Vendor Onboarding Invitation</p>
           </div>
           
           <div style="background: #ffffff; padding: 40px; border-radius: 0 0 8px 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-            <h2 style="color: #333; margin-top: 0;">Welcome to BPI Vendor Portal!</h2>
+            <h2 style="color: #333; margin-top: 0;">Welcome to BPI HabiData!</h2>
             
             <p>Dear ${contactPerson || 'Vendor Representative'},</p>
             
-            <p>You have been invited to join the BPI Vendor Portal for <strong>${companyName}</strong>. This secure portal will allow you to:</p>
+            <p>You have been invited to join BPI HabiData for <strong>${companyName}</strong>. This secure portal will allow you to:</p>
             
             <ul style="padding-left: 20px;">
               <li>Complete your vendor profile and documentation</li>
@@ -95,7 +95,7 @@ const handler = async (req: Request): Promise<Response> => {
             <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
             
             <p style="color: #6c757d; font-size: 12px; text-align: center; margin: 0;">
-              This email was sent by BPI Vendor Portal. If you received this email in error, please disregard it.
+              This email was sent by BPI HabiData. If you received this email in error, please disregard it.
               <br>
               © ${new Date().getFullYear()} Bank of the Philippine Islands. All rights reserved.
             </p>

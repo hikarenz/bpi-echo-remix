@@ -51,7 +51,7 @@ export default function Auth() {
           <div className="flex justify-center">
             <Building2 className="h-12 w-12 text-primary" />
           </div>
-          <h1 className="text-3xl font-bold">BPI Vendor Portal</h1>
+          <h1 className="text-3xl font-bold">BPI HabiData</h1>
           <p className="text-muted-foreground">
             Demo Mode - Choose your role to continue
           </p>

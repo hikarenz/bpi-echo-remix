@@ -13,7 +13,7 @@ export function VendorLayout() {
             <div className="w-6 h-6 bg-gradient-primary rounded flex items-center justify-center">
               <span className="text-xs font-bold text-primary-foreground">V</span>
             </div>
-            <span className="font-semibold text-foreground">Vendor Portal</span>
+            <span className="font-semibold text-foreground">BPI HabiData</span>
           </div>
         </header>
 
