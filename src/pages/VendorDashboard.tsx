@@ -173,7 +173,7 @@ export default function VendorDashboard() {
               Complete view of your vendor lifecycle and performance
             </p>
           </div>
-          <Button variant="outline" onClick={handleSignOut}>
+          <Button variant="destructive" onClick={handleSignOut}>
             <LogOut className="mr-2 h-4 w-4" />
             Sign Out
           </Button>
