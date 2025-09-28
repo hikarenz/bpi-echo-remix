@@ -2,27 +2,15 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useAuth } from '@/components/auth/AuthProvider';
-import { AlertCircle, Building2 } from 'lucide-react';
+import { AlertCircle, Building2, UserCheck, Users } from 'lucide-react';
 
 export default function Auth() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [message, setMessage] = useState<string | null>(null);
-  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const { signIn, signUp, user } = useAuth();
-
-  const invitationToken = searchParams.get('token');
-  const isInvitation = !!invitationToken;
+  const { signIn, user } = useAuth();
 
   useEffect(() => {
     if (user) {
@@ -30,45 +18,27 @@ export default function Auth() {
     }
   }, [user, navigate]);
 
-  const handleSignIn = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setError(null);
-
-    const { error: signInError } = await signIn(email, password);
-    
-    if (signInError) {
-      setError(signInError.message);
+  // Demo credentials for different roles
+  const demoCredentials = {
+    admin: {
+      email: 'admin@bpi.com',
+      password: 'demo123'
+    },
+    vendor: {
+      email: 'vendor@company.com', 
+      password: 'demo123'
     }
-    
-    setLoading(false);
   };
 
-  const handleSignUp = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleDemoLogin = async (role: 'admin' | 'vendor') => {
     setLoading(true);
     setError(null);
-
-    const metadata: any = {
-      first_name: firstName,
-      last_name: lastName,
-    };
-
-    if (isInvitation) {
-      metadata.role = 'vendor';
-      metadata.invitation_token = invitationToken;
-    }
-
-    const { error: signUpError } = await signUp(email, password, metadata);
     
-    if (signUpError) {
-      setError(signUpError.message);
-    } else {
-      if (isInvitation) {
-        setMessage('Account created successfully! You have been linked to your vendor company and can now complete your profile.');
-      } else {
-        setMessage('Account created successfully! Please check your email for verification.');
-      }
+    const credentials = demoCredentials[role];
+    const { error: signInError } = await signIn(credentials.email, credentials.password);
+    
+    if (signInError) {
+      setError(`Demo login failed: ${signInError.message}`);
     }
     
     setLoading(false);
@@ -83,7 +53,7 @@ export default function Auth() {
           </div>
           <h1 className="text-3xl font-bold">BPI Vendor Portal</h1>
           <p className="text-muted-foreground">
-            {isInvitation ? 'Complete your vendor account setup' : 'Access your vendor portal'}
+            Demo Mode - Choose your role to continue
           </p>
         </div>
 
@@ -94,157 +64,60 @@ export default function Auth() {
           </Alert>
         )}
 
-        {message && (
-          <Alert>
-            <AlertDescription>{message}</AlertDescription>
-          </Alert>
-        )}
-
         <Card className="card-glossy-hover">
           <CardHeader>
-            <CardTitle className="text-gradient">
-              {isInvitation ? 'Create Account' : 'Welcome Back'}
-            </CardTitle>
+            <CardTitle className="text-gradient">Demo Login</CardTitle>
             <CardDescription className="text-muted-foreground/80">
-              {isInvitation 
-                ? 'Set up your vendor portal account using the secure invitation link'
-                : 'Sign in to access your vendor portal'
-              }
+              Select a role to explore the platform
             </CardDescription>
           </CardHeader>
-          <CardContent>
-            {isInvitation ? (
-              <form onSubmit={handleSignUp} className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="firstName">First Name</Label>
-                    <Input
-                      id="firstName"
-                      value={firstName}
-                      onChange={(e) => setFirstName(e.target.value)}
-                      required
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="lastName">Last Name</Label>
-                    <Input
-                      id="lastName"
-                      value={lastName}
-                      onChange={(e) => setLastName(e.target.value)}
-                      required
-                    />
-                  </div>
+          <CardContent className="space-y-4">
+            <Button
+              onClick={() => handleDemoLogin('admin')}
+              disabled={loading}
+              className="w-full h-16 text-left flex items-center gap-4"
+              variant="outline"
+            >
+              <div className="flex-shrink-0">
+                <UserCheck className="h-8 w-8 text-primary" />
+              </div>
+              <div className="flex-1">
+                <div className="font-semibold">BPI Admin</div>
+                <div className="text-sm text-muted-foreground">
+                  Manage vendors, view analytics, oversee compliance
                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor="email">Email</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                  />
+              </div>
+            </Button>
+
+            <Button
+              onClick={() => handleDemoLogin('vendor')}
+              disabled={loading}
+              className="w-full h-16 text-left flex items-center gap-4"
+              variant="outline"
+            >
+              <div className="flex-shrink-0">
+                <Users className="h-8 w-8 text-primary" />
+              </div>
+              <div className="flex-1">
+                <div className="font-semibold">Vendor</div>
+                <div className="text-sm text-muted-foreground">
+                  Complete profile, upload documents, manage renewals
                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor="password">Password</Label>
-                  <Input
-                    id="password"
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                  />
-                </div>
-                <Button type="submit" className="w-full" disabled={loading}>
-                  {loading ? 'Creating Account...' : 'Create Account'}
-                </Button>
-              </form>
-            ) : (
-              <Tabs defaultValue="signin" className="w-full">
-                <TabsList className="grid w-full grid-cols-2">
-                  <TabsTrigger value="signin">Sign In</TabsTrigger>
-                  <TabsTrigger value="signup">Sign Up</TabsTrigger>
-                </TabsList>
-                
-                <TabsContent value="signin">
-                  <form onSubmit={handleSignIn} className="space-y-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="email">Email</Label>
-                      <Input
-                        id="email"
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="password">Password</Label>
-                      <Input
-                        id="password"
-                        type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                      />
-                    </div>
-                    <Button type="submit" className="w-full" disabled={loading}>
-                      {loading ? 'Signing In...' : 'Sign In'}
-                    </Button>
-                  </form>
-                </TabsContent>
-                
-                <TabsContent value="signup">
-                  <form onSubmit={handleSignUp} className="space-y-4">
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="firstName">First Name</Label>
-                        <Input
-                          id="firstName"
-                          value={firstName}
-                          onChange={(e) => setFirstName(e.target.value)}
-                          required
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="lastName">Last Name</Label>
-                        <Input
-                          id="lastName"
-                          value={lastName}
-                          onChange={(e) => setLastName(e.target.value)}
-                          required
-                        />
-                      </div>
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="email">Email</Label>
-                      <Input
-                        id="email"
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="password">Password</Label>
-                      <Input
-                        id="password"
-                        type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                      />
-                    </div>
-                    <Button type="submit" className="w-full" disabled={loading}>
-                      {loading ? 'Creating Account...' : 'Create Account'}
-                    </Button>
-                  </form>
-                </TabsContent>
-              </Tabs>
+              </div>
+            </Button>
+
+            {loading && (
+              <div className="text-center">
+                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary mx-auto"></div>
+                <p className="mt-2 text-sm text-muted-foreground">Logging in...</p>
+              </div>
             )}
           </CardContent>
         </Card>
+
+        <div className="text-center text-xs text-muted-foreground">
+          Demo credentials are automatically handled - no signup required
+        </div>
       </div>
     </div>
   );
