@@ -83,9 +83,6 @@ export default function Auth() {
               </div>
               <div className="flex-1">
                 <div className="font-semibold">BPI Admin</div>
-                <div className="text-sm text-muted-foreground">
-                  Manage vendors, view analytics, oversee compliance
-                </div>
               </div>
             </Button>
 
