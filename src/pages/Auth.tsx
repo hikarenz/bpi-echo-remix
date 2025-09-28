@@ -65,7 +65,7 @@ export default function Auth() {
         )}
 
         <Card className="card-glossy-hover">
-          <CardHeader>
+          <CardHeader className="text-center">
             <CardTitle className="text-gradient">Demo Login</CardTitle>
             <CardDescription className="text-muted-foreground/80">
               Select a role to explore the platform
