@@ -83,13 +83,6 @@ export function TopNavigation({ onSidebarToggle }: TopNavigationProps) {
         >
           <Menu className="h-5 w-5" />
         </Button>
-        
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center shadow-md glow-primary">
-            <span className="text-sm font-bold text-primary-foreground">V</span>
-          </div>
-          <span className="text-xl font-semibold text-gradient">Echo Helps</span>
-        </div>
       </div>
 
       <div className="flex-1"></div>
